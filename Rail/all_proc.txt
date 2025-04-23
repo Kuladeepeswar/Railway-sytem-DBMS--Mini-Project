@@ -1,0 +1,571 @@
+2. 
+Auto inc Booking ID, PassngId
+3.
+set primary key (SeatId,CoachID)
+
+
+1. 
+DELIMITER //
+
+CREATE PROCEDURE GetPNRStatusTracking (
+    IN p_bookingID INT
+)
+BEGIN
+    SELECT 
+        b.BookingID,
+        p.Name AS PassengerName,
+        t.TrainName AS TrainName,
+        b.JourneyDate,
+        b.BookingStatus,
+        b.IsCancelled,
+        b.RefundAmount,
+        CASE 
+            WHEN b.BookingStatus = 'wl' THEN NULL
+            ELSE s.SeatNumber
+        END AS SeatNumber
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    JOIN Train t ON b.TrainID = t.TrainID
+    LEFT JOIN Seat s 
+      ON b.SeatID = s.SeatID 
+     AND b.CouchID = s.CoachID
+    WHERE b.BookingID = p_bookingID
+    GROUP BY b.BookingID;
+END;
+//
+
+DELIMITER ;
+
+
+CALL GetPNRStatusTracking(1);
+
+2.
+
+DELIMITER //
+
+CREATE PROCEDURE GetTrainSchedule (
+    IN p_trainID INT
+)
+BEGIN
+    SELECT 
+        s.ScheduleID,
+        s.TrainID,
+        t.TrainName,
+        s.DaysOfOperation,
+        s.FrequencyType,
+        ds.StationName AS DepartureStationName,
+        a.StationName AS ArrivalStationName,
+        s.DepartureTime,
+        s.ArrivalTime,
+        s.JourneyDuration,
+        s.RouteID
+    FROM Schedule s
+    JOIN Train t ON s.TrainID = t.TrainID
+    JOIN Station ds ON s.DepartureStationID = ds.StationID
+    JOIN Station a ON s.ArrivalStationID = a.StationID
+    WHERE s.TrainID = p_trainID;
+END;
+//
+
+DELIMITER ;
+
+
+CALL GetTrainSchedule(12302);
+
+3.Get Available Seats
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetAvailableSeats(
+     IN p_trainID INT,
+     IN p_journeyDate DATETIME  -- Currently not used in seat availability logic
+ )
+ BEGIN
+     SELECT 
+         Coach.CouchType AS Class,
+         COUNT(DISTINCT Coach.CoachID) * 
+           CASE 
+             WHEN Coach.CouchType = 'General'   THEN 120
+             WHEN Coach.CouchType = 'Sleeper'   THEN 60
+             WHEN Coach.CouchType = 'AC Third'  THEN 50
+             WHEN Coach.CouchType = 'AC Second' THEN 40
+             WHEN Coach.CouchType = 'AC First'  THEN 20
+             ELSE 0
+           END AS TotalSeats,
+         SUM(CASE WHEN Seat.IsAvailable = 1 THEN 1 ELSE 0 END) AS AvailableSeats
+     FROM Coach 
+     LEFT JOIN Seat 
+       ON Coach.CoachID = Seat.CoachID
+     WHERE Coach.TrainID = p_trainID
+     GROUP BY Coach.CouchType;
+ END
+ //
+ DELIMITER ;
+
+
+CALL GetAvailableSeats(12302,"2025-04-15 16:55:00");
+
+
+4.
+
+DELIMITER //
+
+CREATE PROCEDURE GetConfirmedPassengers(
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT 
+        p.PassengerID,
+        p.Name,
+        p.Age,
+        p.Gender,
+        b.TrainID,
+        b.JourneyDate,
+        b.BookingStatus
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    WHERE b.TrainID = p_trainID
+      AND b.JourneyDate = p_journeyDate
+      AND b.BookingStatus = 'cnf';
+END;
+//
+
+DELIMITER ;
+
+CALL GetConfirmedPassengers(12791,"2025-04-29 06:00:00");
+
+5.
+DELIMITER //
+
+CREATE PROCEDURE GetWaitlistedPassengers(
+    IN p_trainID INT
+)
+BEGIN
+    SELECT 
+        p.PassengerID,
+        p.Name,
+        p.Email,
+        b.TrainID,
+        b.JourneyDate,
+        b.BookingStatus
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    WHERE b.TrainID = p_trainID
+      AND b.BookingStatus = 'wl';
+END;
+//
+
+DELIMITER ;
+
+CALL GetWaitlistedPassengers(12763);
+6.
+DELIMITER //
+
+CREATE PROCEDURE GetTotalRefundAmount (
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT 
+        T.TrainID,
+        T.TrainName,
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRefund
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.TrainID = p_trainID 
+      AND B.JourneyDate = p_journeyDate
+    GROUP BY T.TrainID, T.TrainName;
+END;
+//
+
+DELIMITER ;
+
+CALL GetTotalRefundAmount(12302,"2025-04-15 16:55:00");
+
+----------------------============================----------------------------
+13.by Class (EXTRA)
+DELIMITER //
+CREATE PROCEDURE GetTotalRefundAmountByClass (
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT 
+        T.TrainID,
+        T.TrainName,
+        C.ClassName,
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRefund
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.TrainID = p_trainID 
+      AND B.JourneyDate = p_journeyDate
+    GROUP BY T.TrainID, T.TrainName, C.ClassName;
+END;
+//
+
+DELIMITER ;
+
+
+
+CALL GetTotalRefundAmountByClass(12302,"2025-04-15 16:55:00");
+
+
+
+7.
+
+DELIMITER //
+
+CREATE PROCEDURE GetTotalRevenue(
+    IN p_startDate DATETIME,
+    IN p_endDate   DATETIME,
+    IN p_bookingStatus VARCHAR(10)
+)
+BEGIN
+    SELECT 
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRevenue
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.JourneyDate BETWEEN p_startDate AND p_endDate 
+      AND B.BookingStatus = p_bookingStatus;
+END;
+//
+
+DELIMITER ;
+
+
+CALL GetTotalRevenue("2025-04-16 06:00:00","2025-04-29 06:00:00","cnf");
+
+
+8.
+
+DELIMITER //
+CREATE PROCEDURE GetCancellationRecords()
+ BEGIN
+     SELECT 
+         b.BookingID,
+         p.Name AS PassengerName,
+         t.TrainName,
+         b.JourneyDate,
+         b.BookingStatus,
+         b.IsCancelled,
+         b.CancelledDate,
+         b.RefundAmount
+     FROM Booking b
+     JOIN Passenger p ON b.PassengerID = p.PassengerID
+     JOIN Train t ON b.TrainID = t.TrainID
+     WHERE b.BookingStatus = 'cancelled';
+ END;
+//
+
+DELIMITER ;
+
+
+CALL GetCancellationRecords();
+
+
+
+9.
+DELIMITER $$
+
+CREATE PROCEDURE sp_busiest_route()
+BEGIN
+    SELECT 
+      ds.StationName AS SourceStationName,
+      asd.StationName AS DestinationStationName,
+      COUNT(*) AS PassengerCount
+    FROM Booking b
+    JOIN Station ds ON b.SourceStationID = ds.StationID
+    JOIN Station asd ON b.DestinationStationID = asd.StationID
+    WHERE b.BookingStatus = 'cnf'
+    GROUP BY b.SourceStationID, b.DestinationStationID
+    ORDER BY PassengerCount DESC
+    LIMIT 1;
+END $$
+
+DELIMITER ;
+
+
+
+
+CALL sp_busiest_route();
+
+
+
+10.
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_itemized_bill_by_class (IN pBookingID INT)
+BEGIN
+    SELECT 
+      b.BookingID,
+      p.Name AS PassengerName,
+      t.TrainName,
+      s.DepartureTime,
+      s.ArrivalTime,
+      cla.ClassName,
+      c.CouchNumber,
+      -- Calculate the base fare based on the distance difference multiplied by the fare per KM:
+      ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * cla.FarePerKM), 2) AS BaseFare,
+      -- Calculate the service charge based on the class:
+      CASE
+         WHEN cla.ClassName = 'First AC' THEN 750.00
+         WHEN cla.ClassName = 'Second AC' THEN 500.00
+         WHEN cla.ClassName = 'Third AC' THEN 250.00
+         WHEN cla.ClassName = 'General' THEN 0.00
+         WHEN cla.ClassName = 'Sleeper' THEN 100.00
+         ELSE 0.00
+      END AS ServiceCharge,
+      -- Total amount is the base fare plus the determined service charge:
+      (ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * cla.FarePerKM), 2) +
+       CASE
+         WHEN cla.ClassName = 'First AC' THEN 750.00
+         WHEN cla.ClassName = 'Second AC' THEN 500.00
+         WHEN cla.ClassName = 'Third AC' THEN 250.00
+         WHEN cla.ClassName = 'General' THEN 0.00
+         WHEN cla.ClassName = 'Sleeper' THEN 100.00
+         ELSE 0.00
+       END) AS TotalAmount
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    JOIN Train t ON b.TrainID = t.TrainID
+    JOIN Coach c ON b.CouchID = c.CoachID
+    JOIN Class cla ON b.ClassID = cla.ClassID
+    JOIN Schedule s ON b.ScheduleID = s.ScheduleID
+    JOIN Route R1 ON b.TrainID = R1.TrainID AND b.SourceStationID = R1.StationID
+    JOIN Route R2 ON b.TrainID = R2.TrainID AND b.DestinationStationID = R2.StationID
+    WHERE b.BookingID = pBookingID
+    GROUP BY 
+      b.BookingID,
+      p.Name,
+      t.TrainName,
+      s.DepartureTime,
+      s.ArrivalTime,
+      cla.ClassName,
+      c.CouchNumber;
+END $$
+
+DELIMITER ;
+
+
+CALL sp_itemized_bill_by_class(19);
+
+
+----------------------
+
+
+
+
+
+11.Ticket booking
+DELIMITER //
+
+CREATE PROCEDURE BookTicketForNewPassenger (
+    IN p_name              VARCHAR(100),
+    IN p_age               INT,
+    IN p_gender            VARCHAR(10),
+    IN p_email             VARCHAR(100),
+    IN p_phone             VARCHAR(15),
+    IN p_nationality       VARCHAR(50),
+    IN p_type              VARCHAR(20),
+    IN p_disability        VARCHAR(10),
+
+    IN b_trainID           INT,
+    IN b_journeyDate       DATETIME,
+    IN b_sourceStationName VARCHAR(100),
+    IN b_destinationStationName VARCHAR(100),
+    IN b_className         VARCHAR(50),
+    IN b_quota             VARCHAR(20)
+)
+BEGIN
+    -- Local variables for lookups and process control
+    DECLARE new_passengerID INT;
+    DECLARE selected_seatID INT;
+    DECLARE selected_coachID INT;
+    DECLARE booking_status VARCHAR(10);
+    DECLARE new_bookingID INT;
+    DECLARE v_sourceStationID INT;
+    DECLARE v_destinationStationID INT;
+    DECLARE v_classID INT;
+    DECLARE v_scheduleID INT;
+
+    -- Step 1: Insert new passenger details
+    INSERT INTO Passenger (Name, Age, Gender, Email, Phone, Nationality, PassengerType, DisabilityStatus)
+    VALUES (p_name, p_age, p_gender, p_email, p_phone, p_nationality, p_type, p_disability);
+    SET new_passengerID = LAST_INSERT_ID();
+
+    -- Step 2: Look up source station ID using station name
+    SELECT IFNULL(MAX(StationID), 0)
+      INTO v_sourceStationID
+      FROM Station
+     WHERE StationName = b_sourceStationName;
+    IF v_sourceStationID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid source station name.';
+    END IF;
+
+    -- Look up destination station ID using station name
+    SELECT IFNULL(MAX(StationID), 0)
+      INTO v_destinationStationID
+      FROM Station
+     WHERE StationName = b_destinationStationName;
+    IF v_destinationStationID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid destination station name.';
+    END IF;
+
+    -- Look up class ID using class name
+    SELECT IFNULL(MAX(ClassID), 0)
+      INTO v_classID
+      FROM Class
+     WHERE ClassName = b_className;
+    IF v_classID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid class name.';
+    END IF;
+
+    -- Look up schedule ID using train id and the identified source and destination station IDs
+    SELECT IFNULL(MAX(ScheduleID), 0)
+      INTO v_scheduleID
+      FROM Schedule
+     WHERE TrainID = b_trainID
+       AND DepartureStationID = v_sourceStationID
+       AND ArrivalStationID = v_destinationStationID;
+    IF v_scheduleID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid train number or no schedule for the provided source and destination.';
+    END IF;
+
+    -- Step 3: Find an available seat for the identified class in the specified train,
+    -- ensuring that the seat belongs to a coach of that train.
+    SELECT Seat.SeatID, Seat.CoachID
+      INTO selected_seatID, selected_coachID
+      FROM Seat
+      JOIN Coach ON Seat.CoachID = Coach.CoachID
+     WHERE Coach.TrainID = b_trainID
+       AND Coach.ClassID = v_classID
+       AND Seat.IsAvailable = 1
+     LIMIT 1;
+
+    -- Step 4: Insert booking details based on seat availability
+    IF selected_seatID IS NOT NULL THEN
+        SET booking_status = 'cnf';
+
+        INSERT INTO Booking (
+            PassengerID, TrainID, ScheduleID, BookingDate, JourneyDate,
+            SourceStationID, DestinationStationID, ClassID,
+            CouchID, SeatID, BookingStatus, QuotaType,
+            IsCancelled, CancelledDate, RefundAmount
+        )
+        VALUES (
+            new_passengerID, b_trainID, v_scheduleID, NOW(), b_journeyDate,
+            v_sourceStationID, v_destinationStationID, v_classID,
+            selected_coachID, selected_seatID, booking_status, b_quota,
+            0, NULL, 0
+        );
+
+        SET new_bookingID = LAST_INSERT_ID();
+
+        -- Mark the selected seat as booked and update reservation flag.
+        UPDATE Seat
+           SET IsAvailable = 0,
+               IsReserved  = 1,
+               BookingID   = new_bookingID
+         WHERE SeatID  = selected_seatID
+           AND CoachID = selected_coachID;
+    ELSE
+        -- If no seat is available, proceed with a waitlisted booking.
+        SET booking_status = 'wl';
+
+        INSERT INTO Booking (
+            PassengerID, TrainID, ScheduleID, BookingDate, JourneyDate,
+            SourceStationID, DestinationStationID, ClassID,
+            CouchID, SeatID, BookingStatus, QuotaType,
+            IsCancelled, CancelledDate, RefundAmount
+        )
+        VALUES (
+            new_passengerID, b_trainID, v_scheduleID, NOW(), b_journeyDate,
+            v_sourceStationID, v_destinationStationID, v_classID,
+            NULL, NULL, booking_status, b_quota,
+            0, NULL, 0
+        );
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+
+
+CALL BookTicketForNewPassenger(
+    'Khaleed', 19, 'male', 'mk@example.com', '7876543210',
+    'Indian', 'Adult', 'No',
+    12791,'2025-04-29 06:00:00', "Secunderabad Junction","Danapur Junction", "First AC", 'General');
+
+
+
+
+12.Cancel ticket procedure
+
+DELIMITER //
+
+CREATE PROCEDURE CancelTicket (IN p_BookingID INT)
+BEGIN
+    DECLARE v_PassengerID INT;
+    
+    -- First: Update seat record(s) to remove reference to the booking.
+    UPDATE Seat
+      SET IsAvailable = 1, 
+          BookingID   = NULL, 
+          IsReserved  = 0
+     WHERE BookingID = p_BookingID;
+    
+    -- Retrieve the PassengerID associated with the booking.
+    SELECT PassengerID 
+      INTO v_PassengerID 
+      FROM Booking 
+     WHERE BookingID = p_BookingID;
+    
+    -- Delete the booking record.
+    DELETE FROM Booking 
+     WHERE BookingID = p_BookingID;
+    
+    -- Delete the passenger record.
+    DELETE FROM Passenger 
+     WHERE PassengerID = v_PassengerID;
+END //
+
+DELIMITER ;
+
+
+CALL CancelTicket(27);
+
+
+
+14.
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_idlest_route()
+BEGIN
+    SELECT 
+      ds.StationName AS SourceStationName,
+      asd.StationName AS DestinationStationName,
+      COUNT(*) AS PassengerCount
+    FROM Booking b
+    JOIN Station ds ON b.SourceStationID = ds.StationID
+    JOIN Station asd ON b.DestinationStationID = asd.StationID
+    WHERE b.BookingStatus = 'cnf'
+    GROUP BY b.SourceStationID, b.DestinationStationID
+    ORDER BY PassengerCount
+    LIMIT 1;
+END $$
+
+DELIMITER ;

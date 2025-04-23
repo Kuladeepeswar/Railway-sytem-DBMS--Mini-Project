@@ -1,0 +1,1402 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\dundi> mysql -u root -p;
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 99
+Server version: 8.0.40 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use rail;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_rail |
++----------------+
+| booking        |
+| bookingstatus  |
+| class          |
+| coach          |
+| passenger      |
+| route          |
+| schedule       |
+| seat           |
+| station        |
+| train          |
++----------------+
+10 rows in set (0.02 sec)
+
+mysql> SELECT ROUTINE_NAME
+    -> FROM information_schema.ROUTINES
+    -> WHERE ROUTINE_TYPE = 'PROCEDURE'
+    ->   AND ROUTINE_SCHEMA = 'rail';
++-----------------------------+
+| ROUTINE_NAME                |
++-----------------------------+
+| BookTicketForNewPassenger   |
+| CancelTicket                |
+| GetAvailableSeats           |
+| GetCancellationRecords      |
+| GetConfirmedPassengers      |
+| GetPNRStatusTracking        |
+| GetTotalRefundAmount        |
+| GetTotalRefundAmountByClass |
+| GetTotalRevenue             |
+| GetTrainSchedule            |
+| GetWaitlistedPassengers     |
+| sp_busiest_route            |
+| sp_idelst_route             |
+| sp_itemized_bill_by_class   |
++-----------------------------+
+14 rows in set (0.01 sec)
+
+mysql> select * from Station;
++-----------+-------------+-----------------------------------+--------------------+----------------+---------------+--------------------------+
+| StationID | StationCode | StationName                       | City               | State          | ContactNumber | NearbyBusStand           |
++-----------+-------------+-----------------------------------+--------------------+----------------+---------------+--------------------------+
+|         1 | SC          | Secunderabad Junction             | Secunderabad       | Telangana      | 04012345678   | JBS Bus Stand            |
+|         2 | KZJ         | Kazipet Junction                  | Kazipet            | Telangana      | 08722223344   | Kazipet Bus Stand        |
+|         3 | PDP         | Peddapalli                        | Peddapalli         | Telangana      | 08722224444   | Peddapalli Bus Stand     |
+|         4 | RDM         | Ramagundam                        | Ramagundam         | Telangana      | 08722225555   | Ramagundam Bus Stand     |
+|         5 | MCI         | Manchiryal                        | Manchiryal         | Telangana      | 08722226666   | Manchiryal Bus Stand     |
+|         6 | BPA         | Bellampalli                       | Bellampalli        | Telangana      | 08722227777   | Bellampalli Bus Stand    |
+|         7 | SKZR        | Sirpur Kaghaznagar                | Sirpur Kaghaznagar | Telangana      | 08722228888   | SKZR Bus Stand           |
+|         8 | BPQ         | Balharshah                        | Balharshah         | Maharashtra    | 07173223344   | Balharshah Bus Stand     |
+|         9 | CDP         | Chandrapur                        | Chandrapur         | Maharashtra    | 07173224444   | Chandrapur Bus Stand     |
+|        10 | SEGM        | Sevagram                          | Wardha             | Maharashtra    | 07173225555   | Sevagram Bus Stand       |
+|        11 | NGP         | Nagpur Junction                   | Nagpur             | Maharashtra    | 07123226666   | Nagpur Bus Stand         |
+|        12 | KTL         | Katol                             | Katol              | Maharashtra    | 07123227777   | Katol Bus Stand          |
+|        13 | BET         | Betul                             | Betul              | Madhya Pradesh | 07123228888   | Betul Bus Stand          |
+|        14 | ITR         | Itarsi Junction                   | Itarsi             | Madhya Pradesh | 07123229999   | Itarsi Bus Stand         |
+|        15 | JBP         | Jabalpur                          | Jabalpur           | Madhya Pradesh | 07123231111   | Jabalpur Bus Stand       |
+|        16 | KTE         | Katni Junction                    | Katni              | Madhya Pradesh | 07123232222   | Katni Bus Stand          |
+|        17 | STA         | Satna Junction                    | Satna              | Madhya Pradesh | 07123233333   | Satna Bus Stand          |
+|        18 | PRYJ        | Prayagraj Junction                | Prayagraj          | Uttar Pradesh  | 07123234444   | Prayagraj Bus Stand      |
+|        19 | PRRB        | Prayagraj Rambag                  | Prayagraj          | Uttar Pradesh  | 07123235555   | Rambag Bus Stand         |
+|        20 | GYN         | Gyanpur Road                      | Gyanpur            | Uttar Pradesh  | 07123236666   | Gyanpur Bus Stand        |
+|        21 | BHLP        | Bhulanpur                         | Varanasi           | Uttar Pradesh  | 07123237777   | Bhulanpur Bus Stand      |
+|        22 | BSB         | Varanasi Junction                 | Varanasi           | Uttar Pradesh  | 07123238888   | Varanasi Bus Stand       |
+|        23 | DDU         | Pt. Deen Dayal Upadhyaya Junction | Mughalsarai        | Uttar Pradesh  | 07123239999   | Mughalsarai Bus Stand    |
+|        24 | DLN         | Dildarnagar Junction              | Dildarnagar        | Bihar          | 06115223344   | Dildarnagar Bus Stand    |
+|        25 | BXR         | Buxar                             | Buxar              | Bihar          | 06115224444   | Buxar Bus Stand          |
+|        26 | ARA         | Ara Junction                      | Ara                | Bihar          | 06115225555   | Ara Bus Stand            |
+|        27 | DNR         | Danapur Junction                  | Danapur            | Bihar          | 06115226666   | Danapur Bus Stand        |
+|        28 | TPTY        | Tirupati Main                     | Tirupati           | Andhra Pradesh | 0877-2222222  | Tirupati Bus Stand       |
+|        29 | TCNR        | Tiruchanur                        | Tirupati           | Andhra Pradesh | 0877-2233445  | Tiruchanur Bus Stop      |
+|        30 | RU          | Renigunta Junction                | Renigunta          | Andhra Pradesh | 0877-2266777  | Renigunta Bus Depot      |
+|        31 | RUXC        | Renigunta Chord Cabin             | Renigunta          | Andhra Pradesh | 0877-2266888  | Renigunta Bus Depot      |
+|        32 | YPD         | Yerpedu                           | Yerpedu            | Andhra Pradesh | 0877-2299111  | Yerpedu Bus Stand        |
+|        33 | RCG         | Rachagunneri                      | Rachagunneri       | Andhra Pradesh | 0877-2288222  | Rachagunneri Bus Stop    |
+|        34 | KHT         | Sri Kalahasti                     | Srikalahasti       | Andhra Pradesh | 08578-222333  | Srikalahasti Bus Stand   |
+|        35 | AKY         | Akkurti                           | Akkurti            | Andhra Pradesh | 08578-224455  | Akkurti Village Stop     |
+|        36 | YLK         | Yellakaru                         | Yellakaru          | Andhra Pradesh | 08578-225566  | Yellakaru Bus Stop       |
+|        37 | YAL         | Yataluru                          | Yataluru           | Andhra Pradesh | 08578-226677  | Yataluru Bus Stop        |
+|        38 | GDR         | Gudur Junction                    | Gudur              | Andhra Pradesh | 08624-222222  | Gudur Bus Stand          |
+|        39 | NLR         | Nellore                           | Nellore            | Andhra Pradesh | 0861-2323456  | Nellore RTC Bus Stand    |
+|        40 | OGL         | Ongole                            | Ongole             | Andhra Pradesh | 08592-244444  | Ongole Main Bus Stand    |
+|        41 | CLX         | Chirala                           | Chirala            | Andhra Pradesh | 08594-266777  | Chirala Bus Station      |
+|        42 | TEL         | Tenali Junction                   | Tenali             | Andhra Pradesh | 08644-255555  | Tenali Bus Depot         |
+|        43 | BZA         | Vijayawada Junction               | Vijayawada         | Andhra Pradesh | 0866-2570000  | Pandit Nehru Bus Station |
+|        44 | KMT         | Khammam                           | Khammam            | Telangana      | 08742-223344  | Khammam Bus Stand        |
+|        45 | MABD        | Mahbubabad                        | Mahbubabad         | Telangana      | 08719-244555  | Mahbubabad Bus Station   |
+|        46 | KDM         | Kesamudram                        | Kesamudram         | Telangana      | 08719-245666  | Kesamudram Bus Stand     |
+|        47 | ZN          | Jangaon                           | Jangaon            | Telangana      | 08716-226600  | Jangaon Bus Stop         |
+|        48 | WL          | Warangal                          | Warangal           | Telangana      | 0870-2447888  | Warangal Bus Station     |
+|        49 | NKD         | Nekonda                           | Nekonda            | Telangana      | 08718-225599  | Nekonda Bus Stop         |
+|        50 | MDR         | Madhira                           | Madhira            | Telangana      | 08683-222888  | Madhira Bus Depot        |
+|        51 | NDLS        | New Delhi Railway Station         | New Delhi          | Delhi          | 01112345678   | ISBT Kashmere Gate       |
+|        52 | CNB         | Kanpur Central                    | Kanpur             | Uttar Pradesh  | 05122567890   | Kanpur Bus Stand         |
+|        53 | GAYA        | Gaya Junction                     | Gaya               | Bihar          | 06312456789   | Gaya Bus Stand           |
+|        54 | PNME        | Parasnath                         | Giridih            | Jharkhand      | 06532234567   | Giridih Bus Stand        |
+|        55 | DHN         | Dhanbad Junction                  | Dhanbad            | Jharkhand      | 03262234567   | Dhanbad Bus Stand        |
+|        56 | ASN         | Asansol Junction                  | Asansol            | West Bengal    | 03412234567   | Asansol Bus Stand        |
+|        57 | HWH         | Howrah Junction                   | Kolkata            | West Bengal    | 03322234567   | Howrah Bus Stand         |
++-----------+-------------+-----------------------------------+--------------------+----------------+---------------+--------------------------+
+57 rows in set (0.01 sec)
+
+mysql> select * from Train;
++---------+----------------------------------------+-----------+-----------------+----------------------+------------+------------+-----------------------------+-----------+----------+
+| TrainID | TrainName                              | TrainType | SourceStationID | DestinationStationID | TotalCoach | TotalSeats | DaysOfOperation             | StartTime | EndTime  |
++---------+----------------------------------------+-----------+-----------------+----------------------+------------+------------+-----------------------------+-----------+----------+
+|   12302 | Kolkata Rajdhani Express               | Shatabdi  | NDLS            | HWH                  |         18 |       1080 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | 16:55:00  | 10:00:00 |
+|   12763 | Padmavati Express                      | Express   | SC              | TPTY                 |         18 |       1080 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | 18:30:00  | 05:00:00 |
+|   12791 | Secunderabad?Danapur Superfast Express | Superfast | SC              | DNR                  |         18 |       1080 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | 09:25:00  | 18:00:00 |
++---------+----------------------------------------+-----------+-----------------+----------------------+------------+------------+-----------------------------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Route;
++---------+---------+-----------+----------------+-------------+---------------+----------+--------------------+----------------+----------+---------------+
+| RouteID | TrainID | StationID | SequenceNumber | ArrivalTime | DepartureTime | HaltTime | DistanceFromSource | PlatformNumber | IsSource | IsDestination |
++---------+---------+-----------+----------------+-------------+---------------+----------+--------------------+----------------+----------+---------------+
+|       1 |   12302 |        51 |              1 | NULL        | 16:55:00      |        0 |                  0 |              1 |        1 |             0 |
+|       2 |   12302 |        52 |              2 | 19:30:00    | 19:35:00      |        5 |                440 |              2 |        0 |             0 |
+|       3 |   12302 |        18 |              3 | 22:15:00    | 22:20:00      |        5 |                635 |              2 |        0 |             0 |
+|       4 |   12302 |        23 |              4 | 00:10:00    | 00:15:00      |        5 |                790 |              2 |        0 |             0 |
+|       5 |   12302 |        53 |              5 | 02:00:00    | 02:05:00      |        5 |                990 |              2 |        0 |             0 |
+|       6 |   12302 |        54 |              6 | 03:15:00    | 03:20:00      |        5 |               1120 |              2 |        0 |             0 |
+|       7 |   12302 |        55 |              7 | 04:10:00    | 04:15:00      |        5 |               1200 |              2 |        0 |             0 |
+|       8 |   12302 |        56 |              8 | 05:30:00    | 05:35:00      |        5 |               1310 |              2 |        0 |             0 |
+|       9 |   12302 |        57 |              9 | 10:00:00    | NULL          |        0 |               1450 |              1 |        0 |             1 |
+|      10 |   12763 |         1 |              1 | NULL        | 06:00:00      |        0 |                  0 |              1 |        1 |             0 |
+|      11 |   12763 |         2 |              2 | 06:45:00    | 06:50:00      |        5 |                 60 |              2 |        0 |             0 |
+|      12 |   12763 |        47 |              3 | 07:20:00    | 07:22:00      |        2 |                 95 |              2 |        0 |             0 |
+|      13 |   12763 |        46 |              4 | 07:40:00    | 07:42:00      |        2 |                120 |              2 |        0 |             0 |
+|      14 |   12763 |        45 |              5 | 08:00:00    | 08:02:00      |        2 |                140 |              2 |        0 |             0 |
+|      15 |   12763 |        44 |              6 | 08:30:00    | 08:35:00      |        5 |                170 |              2 |        0 |             0 |
+|      16 |   12763 |        43 |              7 | 09:30:00    | 09:35:00      |        5 |                230 |              2 |        0 |             0 |
+|      17 |   12763 |        42 |              8 | 10:10:00    | 10:12:00      |        2 |                270 |              2 |        0 |             0 |
+|      18 |   12763 |        41 |              9 | 10:40:00    | 10:42:00      |        2 |                300 |              2 |        0 |             0 |
+|      19 |   12763 |        40 |             10 | 11:15:00    | 11:20:00      |        5 |                340 |              2 |        0 |             0 |
+|      20 |   12763 |        39 |             11 | 12:00:00    | 12:05:00      |        5 |                390 |              2 |        0 |             0 |
+|      21 |   12763 |        38 |             12 | 12:40:00    | 12:45:00      |        5 |                430 |              2 |        0 |             0 |
+|      22 |   12763 |        37 |             13 | 13:10:00    | 13:12:00      |        2 |                460 |              2 |        0 |             0 |
+|      23 |   12763 |        36 |             14 | 13:25:00    | 13:27:00      |        2 |                470 |              2 |        0 |             0 |
+|      24 |   12763 |        35 |             15 | 13:40:00    | 13:42:00      |        2 |                480 |              2 |        0 |             0 |
+|      25 |   12763 |        34 |             16 | 14:00:00    | 14:05:00      |        5 |                500 |              2 |        0 |             0 |
+|      26 |   12763 |        33 |             17 | 14:20:00    | 14:22:00      |        2 |                520 |              2 |        0 |             0 |
+|      27 |   12763 |        32 |             18 | 14:40:00    | 14:42:00      |        2 |                535 |              2 |        0 |             0 |
+|      28 |   12763 |        31 |             19 | 15:00:00    | 15:02:00      |        2 |                550 |              2 |        0 |             0 |
+|      29 |   12763 |        30 |             20 | 15:10:00    | 15:12:00      |        2 |                555 |              2 |        0 |             0 |
+|      30 |   12763 |        29 |             21 | 15:30:00    | 15:32:00      |        2 |                570 |              2 |        0 |             0 |
+|      31 |   12763 |        28 |             22 | 16:00:00    | NULL          |        0 |                580 |              1 |        0 |             1 |
+|      32 |   12791 |         1 |              1 | NULL        | 06:00:00      |        0 |                  0 |              1 |        1 |             0 |
+|      33 |   12791 |         2 |              2 | 06:45:00    | 06:50:00      |        5 |                 60 |              2 |        0 |             0 |
+|      34 |   12791 |         3 |              3 | 07:30:00    | 07:32:00      |        2 |                120 |              2 |        0 |             0 |
+|      35 |   12791 |         4 |              4 | 08:10:00    | 08:12:00      |        2 |                180 |              2 |        0 |             0 |
+|      36 |   12791 |         5 |              5 | 08:45:00    | 08:47:00      |        2 |                220 |              2 |        0 |             0 |
+|      37 |   12791 |         6 |              6 | 09:20:00    | 09:22:00      |        2 |                260 |              2 |        0 |             0 |
+|      38 |   12791 |         7 |              7 | 10:00:00    | 10:02:00      |        2 |                300 |              2 |        0 |             0 |
+|      39 |   12791 |         8 |              8 | 10:40:00    | 10:42:00      |        2 |                350 |              2 |        0 |             0 |
+|      40 |   12791 |         9 |              9 | 11:20:00    | 11:22:00      |        2 |                400 |              2 |        0 |             0 |
+|      41 |   12791 |        10 |             10 | 12:00:00    | 12:02:00      |        2 |                450 |              2 |        0 |             0 |
+|      42 |   12791 |        11 |             11 | 12:45:00    | 12:50:00      |        5 |                500 |              2 |        0 |             0 |
+|      43 |   12791 |        12 |             12 | 13:30:00    | 13:32:00      |        2 |                540 |              2 |        0 |             0 |
+|      44 |   12791 |        13 |             13 | 14:15:00    | 14:17:00      |        2 |                580 |              2 |        0 |             0 |
+|      45 |   12791 |        14 |             14 | 15:00:00    | 15:05:00      |        5 |                620 |              2 |        0 |             0 |
+|      46 |   12791 |        15 |             15 | 16:00:00    | 16:02:00      |        2 |                670 |              2 |        0 |             0 |
+|      47 |   12791 |        16 |             16 | 17:00:00    | 17:02:00      |        2 |                710 |              2 |        0 |             0 |
+|      48 |   12791 |        17 |             17 | 18:00:00    | 18:02:00      |        2 |                750 |              2 |        0 |             0 |
+|      49 |   12791 |        18 |             18 | 19:00:00    | 19:02:00      |        2 |                800 |              2 |        0 |             0 |
+|      50 |   12791 |        19 |             19 | 19:20:00    | 19:22:00      |        2 |                820 |              2 |        0 |             0 |
+|      51 |   12791 |        20 |             20 | 19:40:00    | 19:42:00      |        2 |                840 |              2 |        0 |             0 |
+|      52 |   12791 |        21 |             21 | 20:00:00    | 20:02:00      |        2 |                860 |              2 |        0 |             0 |
+|      53 |   12791 |        22 |             22 | 20:20:00    | 20:25:00      |        5 |                880 |              2 |        0 |             0 |
+|      54 |   12791 |        23 |             23 | 21:00:00    | 21:02:00      |        2 |                900 |              2 |        0 |             0 |
+|      55 |   12791 |        24 |             24 | 21:40:00    | 21:42:00      |        2 |                940 |              2 |        0 |             0 |
+|      56 |   12791 |        25 |             25 | 22:15:00    | 22:17:00      |        2 |                980 |              2 |        0 |             0 |
+|      57 |   12791 |        26 |             26 | 22:45:00    | 22:47:00      |        2 |               1010 |              2 |        0 |             0 |
+|      58 |   12791 |        27 |             27 | 23:30:00    | NULL          |        0 |               1050 |              1 |        0 |             1 |
++---------+---------+-----------+----------------+-------------+---------------+----------+--------------------+----------------+----------+---------------+
+58 rows in set (0.00 sec)
+
+mysql> select * from Class;
++---------+-----------+---------------+------------+-----------+-------------+
+| ClassID | ClassCode | ClassName     | IsReserved | FarePerKM | MaxCapacity |
++---------+-----------+---------------+------------+-----------+-------------+
+|       1 | SL        | Sleeper Class |          1 |        12 |        1000 |
+|       2 | 3A        | Third AC      |          1 |        15 |         500 |
+|       3 | 2A        | Second AC     |          1 |        17 |         400 |
+|       4 | 1A        | First AC      |          1 |        20 |         200 |
+|       5 | GN        | General Class |          0 |        11 |        1200 |
++---------+-----------+---------------+------------+-----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Coach;
++---------+---------+-------------+-----------+---------+------------+------------+
+| CoachID | TrainID | CouchNumber | CouchType | ClassID | TotalSeats | IsReserved |
++---------+---------+-------------+-----------+---------+------------+------------+
+|       1 |   12302 | S1          | Sleeper   |       1 |         60 |          1 |
+|       2 |   12302 | S2          | Sleeper   |       1 |         60 |          1 |
+|       3 |   12302 | S3          | Sleeper   |       1 |         60 |          1 |
+|       4 |   12302 | S4          | Sleeper   |       1 |         60 |          1 |
+|       5 |   12302 | S5          | Sleeper   |       1 |         60 |          1 |
+|       6 |   12302 | S6          | Sleeper   |       1 |         60 |          1 |
+|       7 |   12302 | S7          | Sleeper   |       1 |         60 |          1 |
+|       8 |   12302 | S8          | Sleeper   |       1 |         60 |          1 |
+|       9 |   12302 | S9          | Sleeper   |       1 |         60 |          1 |
+|      10 |   12302 | B1          | AC Third  |       2 |         50 |          1 |
+|      11 |   12302 | B2          | AC Third  |       2 |         50 |          1 |
+|      12 |   12302 | B3          | AC Third  |       2 |         50 |          1 |
+|      13 |   12302 | B4          | AC Third  |       2 |         50 |          1 |
+|      14 |   12302 | A1          | AC Second |       3 |         40 |          1 |
+|      15 |   12302 | A2          | AC Second |       3 |         40 |          1 |
+|      16 |   12302 | H1          | AC First  |       4 |         20 |          1 |
+|      17 |   12302 | GN1         | General   |       5 |        120 |          0 |
+|      18 |   12302 | GN2         | General   |       5 |        120 |          0 |
+|      19 |   12763 | S1          | Sleeper   |       1 |         60 |          1 |
+|      20 |   12763 | S2          | Sleeper   |       1 |         60 |          1 |
+|      21 |   12763 | S3          | Sleeper   |       1 |         60 |          1 |
+|      22 |   12763 | S4          | Sleeper   |       1 |         60 |          1 |
+|      23 |   12763 | S5          | Sleeper   |       1 |         60 |          1 |
+|      24 |   12763 | S6          | Sleeper   |       1 |         60 |          1 |
+|      25 |   12763 | S7          | Sleeper   |       1 |         60 |          1 |
+|      26 |   12763 | S8          | Sleeper   |       1 |         60 |          1 |
+|      27 |   12763 | S9          | Sleeper   |       1 |         60 |          1 |
+|      28 |   12763 | B1          | AC Third  |       2 |         50 |          1 |
+|      29 |   12763 | B2          | AC Third  |       2 |         50 |          1 |
+|      30 |   12763 | B3          | AC Third  |       2 |         50 |          1 |
+|      31 |   12763 | B4          | AC Third  |       2 |         50 |          1 |
+|      32 |   12763 | A1          | AC Second |       3 |         40 |          1 |
+|      33 |   12763 | A2          | AC Second |       3 |         40 |          1 |
+|      34 |   12763 | H1          | AC First  |       4 |         20 |          1 |
+|      35 |   12763 | GN1         | General   |       5 |        120 |          0 |
+|      36 |   12763 | GN2         | General   |       5 |        120 |          0 |
+|      37 |   12791 | S1          | Sleeper   |       1 |         60 |          1 |
+|      38 |   12791 | S2          | Sleeper   |       1 |         60 |          1 |
+|      39 |   12791 | S3          | Sleeper   |       1 |         60 |          1 |
+|      40 |   12791 | S4          | Sleeper   |       1 |         60 |          1 |
+|      41 |   12791 | S5          | Sleeper   |       1 |         60 |          1 |
+|      42 |   12791 | S6          | Sleeper   |       1 |         60 |          1 |
+|      43 |   12791 | S7          | Sleeper   |       1 |         60 |          1 |
+|      44 |   12791 | S8          | Sleeper   |       1 |         60 |          1 |
+|      45 |   12791 | S9          | Sleeper   |       1 |         60 |          1 |
+|      46 |   12791 | B1          | AC Third  |       2 |         50 |          1 |
+|      47 |   12791 | B2          | AC Third  |       2 |         50 |          1 |
+|      48 |   12791 | B3          | AC Third  |       2 |         50 |          1 |
+|      49 |   12791 | B4          | AC Third  |       2 |         50 |          1 |
+|      50 |   12791 | A1          | AC Second |       3 |         40 |          1 |
+|      51 |   12791 | A2          | AC Second |       3 |         40 |          1 |
+|      52 |   12791 | H1          | AC First  |       4 |         20 |          1 |
+|      53 |   12791 | GN1         | General   |       5 |        120 |          0 |
+|      54 |   12791 | GN2         | General   |       5 |        120 |          0 |
++---------+---------+-------------+-----------+---------+------------+------------+
+54 rows in set (0.00 sec)
+
+mysql> select * from Schedule;
++------------+---------+-----------------------------+---------------+--------------------+------------------+---------------+-------------+-----------------+---------+
+| ScheduleID | TrainID | DaysOfOperation             | FrequencyType | DepartureStationID | ArrivalStationID | DepartureTime | ArrivalTime | JourneyDuration | RouteID |
++------------+---------+-----------------------------+---------------+--------------------+------------------+---------------+-------------+-----------------+---------+
+|          1 |   12302 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | Daily         |                 51 |               57 | 16:55:00      | 10:00:00    | 16.083 hours    |       1 |
+|          2 |   12763 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | Daily         |                  1 |               28 | 06:00:00      | 16:00:00    | 10 hours        |      10 |
+|          3 |   12791 | Mon,Tue,Wed,Thu,Fri,Sat,Sun | Daily         |                  1 |               27 | 06:00:00      | 23:30:00    | 17.5 hours      |      32 |
++------------+---------+-----------------------------+---------------+--------------------+------------------+---------------+-------------+-----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Passenger;
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+| PassengerID | Name             | Age  | Gender | Email                        | Phone      | Nationality | PassengerType  | DisabilityStatus |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+|           1 | Rajesh Kumar     |   30 | male   | rajesh.kumar@example.com     | 9876543210 | Indian      | Adult          | No               |
+|           2 | Anjali Singh     |   25 | female | anjali.singh@example.com     | 9988776655 | Indian      | Adult          | No               |
+|           3 | Aarav Mehta      |   10 | male   | aarav.mehta@example.com      | 9988665544 | Indian      | child          | No               |
+|           4 | Sanya Patel      |   70 | female | sanya.patel@example.com      | 9898989898 | Indian      | senior citizen | No               |
+|           5 | Ravi Shankar     |   45 | male   | ravi.shankar@example.com     | 9765432109 | Indian      | Adult          | Yes              |
+|           6 | Priya Gupta      |   18 | female | priya.gupta@example.com      | 9988777788 | Indian      | student        | No               |
+|           7 | Mohammed Ali     |   60 | male   | mohammed.ali@example.com     | 9765321890 | Indian      | senior citizen | Yes              |
+|           8 | Meera Iyer       |    5 | female | meera.iyer@example.com       | 9556677889 | Indian      | child          | No               |
+|           9 | Vikram Chauhan   |   35 | male   | vikram.chauhan@example.com   | 9333445566 | Indian      | Adult          | No               |
+|          10 | Neha Sharma      |   28 | female | neha.sharma@example.com      | 9200334455 | Indian      | Adult          | No               |
+|          11 | Arvind Yadav     |   50 | male   | arvind.yadav@example.com     | 9876554321 | Indian      | Adult          | No               |
+|          12 | Kiran Reddy      |   22 | female | kiran.reddy@example.com      | 9944778899 | Indian      | Adult          | No               |
+|          13 | Suresh Kumar     |   65 | male   | suresh.kumar@example.com     | 9666554433 | Indian      | senior citizen | Yes              |
+|          14 | Nisha Verma      |   28 | female | nisha.verma@example.com      | 9865332244 | Indian      | Adult          | No               |
+|          15 | Siddharth Sharma |   13 | male   | siddharth.sharma@example.com | 9399221100 | Indian      | child          | No               |
+|          16 | Divya Nair       |   32 | female | divya.nair@example.com       | 9199887744 | Indian      | Adult          | No               |
+|          17 | Rajeev Chandra   |   40 | male   | rajeeve.chandra@example.com  | 9488776655 | Indian      | Adult          | No               |
+|          18 | Manoj Joshi      |   75 | male   | manoj.joshi@example.com      | 9222345678 | Indian      | senior citizen | Yes              |
+|          19 | Sonali Deshmukh  |    8 | female | sonali.deshmukh@example.com  | 9389887766 | Indian      | child          | No               |
+|          20 | Harish Bhat      |   60 | male   | harish.bhat@example.com      | 9756432100 | Indian      | senior citizen | No               |
+|          21 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          22 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          23 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          25 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          26 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          30 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          31 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          33 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          34 | Sathvik          |   19 | male   | ss@example.com               | 7876543210 | Indian      | Adult          | No               |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+29 rows in set (0.00 sec)
+
+mysql> select * from Booking;
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+| BookingID | PassengerID | TrainID | ScheduleID | BookingDate         | JourneyDate         | SourceStationID | DestinationStationID | ClassID | CouchID | SeatID | BookingStatus | QuotaType      | IsCancelled | CancelledDate       | RefundAmount |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+|         1 |           1 |   12302 |          1 | 2025-04-12 10:00:00 | 2025-04-15 16:55:00 |              51 |                   57 |       4 |      16 |     10 | cnf           | General        |           0 | NULL                |            0 |
+|         2 |           2 |   12763 |          2 | 2025-04-12 14:30:00 | 2025-04-16 06:00:00 |               1 |                   28 |       4 |      34 |     12 | wl            | Tatkal         |           0 | NULL                |            0 |
+|         3 |           3 |   12791 |          3 | 2025-04-11 16:00:00 | 2025-04-13 06:00:00 |               1 |                   27 |       4 |      52 |     20 | rac           | General        |           0 | NULL                |            0 |
+|         4 |           4 |   12302 |          1 | 2025-04-10 08:00:00 | 2025-04-14 16:55:00 |              51 |                   57 |       4 |      16 |     20 | cnf           | Normal         |           0 | NULL                |            0 |
+|         5 |           5 |   12763 |          2 | 2025-04-13 11:30:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |     15 | cancelled     | Ladies         |           1 | 2025-04-13 14:00:00 |          250 |
+|         6 |           6 |   12791 |          3 | 2025-04-13 09:15:00 | 2025-04-18 06:00:00 |               1 |                   27 |       4 |      52 |     18 | cnf           | General        |           0 | NULL                |            0 |
+|         7 |           7 |   12763 |          2 | 2025-04-14 13:45:00 | 2025-04-19 06:00:00 |               1 |                   28 |       4 |      34 |     20 | rac           | Tatkal         |           0 | NULL                |            0 |
+|         8 |           8 |   12302 |          1 | 2025-04-12 20:00:00 | 2025-04-20 16:55:00 |              51 |                   57 |       4 |      16 |     16 | wl            | General        |           0 | NULL                |            0 |
+|         9 |           9 |   12791 |          3 | 2025-04-15 18:00:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        10 |          10 |   12763 |          2 | 2025-04-13 11:00:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |      2 | cnf           | Normal         |           0 | NULL                |            0 |
+|        11 |          11 |   12791 |          3 | 2025-04-14 07:30:00 | 2025-04-15 06:00:00 |               1 |                   27 |       4 |      52 |      3 | cnf           | General        |           0 | NULL                |            0 |
+|        12 |          12 |   12763 |          2 | 2025-04-16 15:30:00 | 2025-04-18 06:00:00 |               1 |                   28 |       4 |      34 |      4 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        13 |          13 |   12791 |          3 | 2025-04-17 14:00:00 | 2025-04-19 06:00:00 |               1 |                   27 |       4 |      52 |      5 | cnf           | Normal         |           0 | NULL                |            0 |
+|        14 |          14 |   12302 |          1 | 2025-04-18 09:30:00 | 2025-04-21 16:55:00 |              51 |                   57 |       4 |      16 |      6 | wl            | Ladies         |           0 | NULL                |            0 |
+|        15 |          15 |   12791 |          3 | 2025-04-19 12:15:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      7 | cancelled     | Senior Citizen |           1 | 2025-04-19 16:00:00 |          300 |
+|        16 |          16 |   12763 |          2 | 2025-04-20 13:00:00 | 2025-04-23 06:00:00 |               1 |                   28 |       4 |      34 |      8 | cnf           | General        |           0 | NULL                |            0 |
+|        17 |          17 |   12302 |          1 | 2025-04-21 17:45:00 | 2025-04-24 16:55:00 |              51 |                   57 |       4 |      16 |      9 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        18 |          18 |   12791 |          3 | 2025-04-22 10:30:00 | 2025-04-25 06:00:00 |               1 |                   27 |       4 |      52 |     10 | cnf           | Normal         |           0 | NULL                |            0 |
+|        19 |          19 |   12763 |          2 | 2025-04-23 20:00:00 | 2025-04-26 06:00:00 |               1 |                   28 |       4 |      34 |     11 | wl            | Ladies         |           0 | NULL                |            0 |
+|        20 |          20 |   12791 |          3 | 2025-04-24 11:45:00 | 2025-04-27 06:00:00 |               1 |                   27 |       4 |      52 |     12 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        21 |          22 |   12791 |          3 | 2025-04-15 17:58:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        22 |          23 |   12791 |          3 | 2025-04-15 17:59:06 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        24 |          25 |   12791 |          3 | 2025-04-15 18:23:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      4 | cnf           | General        |           0 | NULL                |            0 |
+|        25 |          26 |   12791 |          3 | 2025-04-15 18:26:38 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      6 | cnf           | General        |           0 | NULL                |            0 |
+|        30 |          34 |   12791 |          3 | 2025-04-16 16:41:29 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | General        |           0 | NULL                |            0 |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+25 rows in set (0.00 sec)
+
+mysql> select * from Seat;
++--------+---------+------------+---------+-------------+-----------+------------+----------+------------+
+| SeatID | CoachID | SeatNumber | ClassID | IsAvailable | BookingID | SeatType   | Position | IsReserved |
++--------+---------+------------+---------+-------------+-----------+------------+----------+------------+
+|      1 |       1 | S1-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       2 | S2-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       3 | S3-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       4 | S4-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       5 | S5-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       6 | S6-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       7 | S7-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       8 | S8-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |       9 | S9-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      10 | B1-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      11 | B2-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      12 | B3-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      13 | B4-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      14 | A1-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      15 | A2-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      16 | H1-1       |       4 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      17 | GN1-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      18 | GN2-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      19 | S1-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      20 | S2-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      21 | S3-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      22 | S4-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      23 | S5-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      24 | S6-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      25 | S7-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      26 | S8-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      27 | S9-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      28 | B1-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      29 | B2-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      30 | B3-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      31 | B4-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      32 | A1-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      33 | A2-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      34 | H1-1       |       4 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      35 | GN1-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      36 | GN2-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      37 | S1-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      38 | S2-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      39 | S3-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      40 | S4-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      41 | S5-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      42 | S6-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      43 | S7-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      44 | S8-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      45 | S9-1       |       1 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      46 | B1-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      47 | B2-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      48 | B3-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      49 | B4-1       |       2 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      50 | A1-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      51 | A2-1       |       3 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      52 | H1-1       |       4 |           0 |        30 | Lower      | Window   |          1 |
+|      1 |      53 | GN1-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      1 |      54 | GN2-1      |       5 |           1 |      NULL | Lower      | Window   |          0 |
+|      2 |       1 | S1-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       2 | S2-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       3 | S3-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       4 | S4-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       5 | S5-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       6 | S6-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       7 | S7-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       8 | S8-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |       9 | S9-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      10 | B1-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      11 | B2-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      12 | B3-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      13 | B4-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      14 | A1-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      15 | A2-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      16 | H1-2       |       4 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      17 | GN1-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      18 | GN2-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      19 | S1-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      20 | S2-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      21 | S3-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      22 | S4-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      23 | S5-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      24 | S6-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      25 | S7-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      26 | S8-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      27 | S9-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      28 | B1-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      29 | B2-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      30 | B3-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      31 | B4-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      32 | A1-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      33 | A2-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      34 | H1-2       |       4 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      35 | GN1-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      36 | GN2-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      37 | S1-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      38 | S2-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      39 | S3-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      40 | S4-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      41 | S5-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      42 | S6-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      43 | S7-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      44 | S8-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      45 | S9-2       |       1 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      46 | B1-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      47 | B2-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      48 | B3-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      49 | B4-2       |       2 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      50 | A1-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      51 | A2-2       |       3 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      52 | H1-2       |       4 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      53 | GN1-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      2 |      54 | GN2-2      |       5 |           1 |      NULL | Middle     | Aisle    |          0 |
+|      3 |       1 | S1-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       2 | S2-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       3 | S3-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       4 | S4-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       5 | S5-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       6 | S6-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       7 | S7-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       8 | S8-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |       9 | S9-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      10 | B1-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      11 | B2-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      12 | B3-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      13 | B4-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      14 | A1-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      15 | A2-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      16 | H1-3       |       4 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      17 | GN1-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      18 | GN2-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      19 | S1-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      20 | S2-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      21 | S3-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      22 | S4-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      23 | S5-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      24 | S6-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      25 | S7-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      26 | S8-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      27 | S9-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      28 | B1-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      29 | B2-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      30 | B3-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      31 | B4-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      32 | A1-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      33 | A2-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      34 | H1-3       |       4 |           0 |        10 | Upper      | Middle   |          1 |
+|      3 |      35 | GN1-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      36 | GN2-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      37 | S1-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      38 | S2-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      39 | S3-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      40 | S4-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      41 | S5-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      42 | S6-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      43 | S7-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      44 | S8-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      45 | S9-3       |       1 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      46 | B1-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      47 | B2-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      48 | B3-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      49 | B4-3       |       2 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      50 | A1-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      51 | A2-3       |       3 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      52 | H1-3       |       4 |           0 |        11 | Upper      | Middle   |          1 |
+|      3 |      53 | GN1-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      3 |      54 | GN2-3      |       5 |           1 |      NULL | Upper      | Middle   |          0 |
+|      4 |       1 | S1-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       2 | S2-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       3 | S3-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       4 | S4-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       5 | S5-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       6 | S6-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       7 | S7-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       8 | S8-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |       9 | S9-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      10 | B1-4       |       2 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      11 | B2-4       |       2 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      12 | B3-4       |       2 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      13 | B4-4       |       2 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      14 | A1-4       |       3 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      15 | A2-4       |       3 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      16 | H1-4       |       4 |           0 |        24 | Side Lower | Window   |          0 |
+|      4 |      17 | GN1-4      |       5 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      18 | GN2-4      |       5 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      19 | S1-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      20 | S2-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      21 | S3-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      22 | S4-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      23 | S5-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
+|      4 |      24 | S6-4       |       1 |           1 |      NULL | Side Lower | Window   |          0 |
++--------+---------+------------+---------+-------------+-----------+------------+----------+------------+
+3240 rows in set (0.01 sec)
+
+mysql> ^C -- query aborted
+^C
+mysql> select * from BookingStatus;
++----------+------------+----------------------------------+---------------+------------------+----------------+---------------------+
+| StatusID | StatusCode | StatusName                       | IsFinalStatus | IsRefundEligible | AllowsBoarding | CreatedAt           |
++----------+------------+----------------------------------+---------------+------------------+----------------+---------------------+
+|        1 | CNF        | Confirmed                        |             1 |                1 |              1 | 2025-04-14 10:00:00 |
+|        2 | WL         | Waitlisted                       |             0 |                1 |              0 | 2025-04-14 10:15:00 |
+|        3 | RAC        | Reservation Against Cancellation |             0 |                1 |              1 | 2025-04-14 10:30:00 |
+|        4 | CAN        | Cancelled                        |             1 |                1 |              0 | 2025-04-14 10:45:00 |
++----------+------------+----------------------------------+---------------+------------------+----------------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> show create procedure  GetPNRStatusTracking;
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure            | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | character_set_client | collation_connection | Database Collation |
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetPNRStatusTracking | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPNRStatusTracking`(
+    IN p_bookingID INT
+)
+BEGIN
+    SELECT
+        b.BookingID,
+        p.Name AS PassengerName,
+        t.TrainName AS TrainName,
+        b.JourneyDate,
+        b.BookingStatus,
+        b.IsCancelled,
+        b.RefundAmount,
+        CASE
+            WHEN b.BookingStatus = 'wl' THEN NULL
+            ELSE s.SeatNumber
+        END AS SeatNumber
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    JOIN Train t ON b.TrainID = t.TrainID
+    LEFT JOIN Seat s
+      ON b.SeatID = s.SeatID
+     AND b.CouchID = s.CoachID
+    WHERE b.BookingID = p_bookingID
+    GROUP BY b.BookingID;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> CALL GetPNRStatusTracking(1);
++-----------+---------------+--------------------------+---------------------+---------------+-------------+--------------+------------+
+| BookingID | PassengerName | TrainName                | JourneyDate         | BookingStatus | IsCancelled | RefundAmount | SeatNumber |
++-----------+---------------+--------------------------+---------------------+---------------+-------------+--------------+------------+
+|         1 | Rajesh Kumar  | Kolkata Rajdhani Express | 2025-04-15 16:55:00 | cnf           |           0 |            0 | H1-10      |
++-----------+---------------+--------------------------+---------------------+---------------+-------------+--------------+------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show create procedure  GetTrainSchedule;
++------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure        | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | character_set_client | collation_connection | Database Collation |
++------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetTrainSchedule | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetTrainSchedule`(
+    IN p_trainID INT
+)
+BEGIN
+    SELECT
+        s.ScheduleID,
+        s.TrainID,
+        t.TrainName,
+        s.DaysOfOperation,
+        s.FrequencyType,
+        ds.StationName AS DepartureStationName,
+        a.StationName AS ArrivalStationName,
+        s.DepartureTime,
+        s.ArrivalTime,
+        s.JourneyDuration,
+        s.RouteID
+    FROM Schedule s
+    JOIN Train t ON s.TrainID = t.TrainID
+    JOIN Station ds ON s.DepartureStationID = ds.StationID
+    JOIN Station a ON s.ArrivalStationID = a.StationID
+    WHERE s.TrainID = p_trainID;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetTrainSchedule(12302);
++------------+---------+--------------------------+-----------------------------+---------------+---------------------------+--------------------+---------------+-------------+-----------------+---------+
+| ScheduleID | TrainID | TrainName                | DaysOfOperation             | FrequencyType | DepartureStationName      | ArrivalStationName | DepartureTime | ArrivalTime | JourneyDuration | RouteID |
++------------+---------+--------------------------+-----------------------------+---------------+---------------------------+--------------------+---------------+-------------+-----------------+---------+
+|          1 |   12302 | Kolkata Rajdhani Express | Mon,Tue,Wed,Thu,Fri,Sat,Sun | Daily         | New Delhi Railway Station | Howrah Junction    | 16:55:00      | 10:00:00    | 16.083 hours    |       1 |
++------------+---------+--------------------------+-----------------------------+---------------+---------------------------+--------------------+---------------+-------------+-----------------+---------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show create procedure  GetAvailableSeats;
++-------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure         | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | character_set_client | collation_connection | Database Collation |
++-------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetAvailableSeats | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAvailableSeats`(
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME  -- Currently not used in seat availability logic
+)
+BEGIN
+    SELECT
+        Coach.CouchType AS Class,
+        COUNT(DISTINCT Coach.CoachID) *
+          CASE
+            WHEN Coach.CouchType = 'General'   THEN 120
+            WHEN Coach.CouchType = 'Sleeper'   THEN 60
+            WHEN Coach.CouchType = 'AC Third'  THEN 50
+            WHEN Coach.CouchType = 'AC Second' THEN 40
+            WHEN Coach.CouchType = 'AC First'  THEN 20
+            ELSE 0
+          END AS TotalSeats,
+        SUM(CASE WHEN Seat.IsAvailable = 1 THEN 1 ELSE 0 END) AS AvailableSeats
+    FROM Coach
+    LEFT JOIN Seat
+      ON Coach.CoachID = Seat.CoachID
+    WHERE Coach.TrainID = p_trainID
+    GROUP BY Coach.CouchType;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++-------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetAvailableSeats(12302,"2025-04-15 16:55:00");
++-----------+------------+----------------+
+| Class     | TotalSeats | AvailableSeats |
++-----------+------------+----------------+
+| Sleeper   |        540 |            540 |
+| AC First  |         20 |             14 |
+| AC Second |         80 |             80 |
+| AC Third  |        200 |            200 |
+| General   |        240 |            240 |
++-----------+------------+----------------+
+5 rows in set (0.01 sec)
+
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show create procedure  GetConfirmedPassengers;
++------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure              | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                | character_set_client | collation_connection | Database Collation |
++------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetConfirmedPassengers | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetConfirmedPassengers`(
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT
+        p.PassengerID,
+        p.Name,
+        p.Age,
+        p.Gender,
+        b.TrainID,
+        b.JourneyDate,
+        b.BookingStatus
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    WHERE b.TrainID = p_trainID
+      AND b.JourneyDate = p_journeyDate
+      AND b.BookingStatus = 'cnf';
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> CALL GetConfirmedPassengers(12791,"2025-04-29 06:00:00");
++-------------+---------------+------+--------+---------+---------------------+---------------+
+| PassengerID | Name          | Age  | Gender | TrainID | JourneyDate         | BookingStatus |
++-------------+---------------+------+--------+---------+---------------------+---------------+
+|          22 | Dheeraj Reddy |   22 | male   |   12791 | 2025-04-29 06:00:00 | cnf           |
+|          23 | Dheeraj Reddy |   22 | male   |   12791 | 2025-04-29 06:00:00 | cnf           |
+|          25 | naveen        |   22 | male   |   12791 | 2025-04-29 06:00:00 | cnf           |
+|          26 | naveen        |   22 | male   |   12791 | 2025-04-29 06:00:00 | cnf           |
+|          34 | Sathvik       |   19 | male   |   12791 | 2025-04-29 06:00:00 | cnf           |
++-------------+---------------+------+--------+---------+---------------------+---------------+
+5 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show create procedure  GetWaitlistedPassengers;
++-------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure               | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                         | character_set_client | collation_connection | Database Collation |
++-------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetWaitlistedPassengers | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetWaitlistedPassengers`(
+    IN p_trainID INT
+)
+BEGIN
+    SELECT
+        p.PassengerID,
+        p.Name,
+        p.Email,
+        b.TrainID,
+        b.JourneyDate,
+        b.BookingStatus
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    WHERE b.TrainID = p_trainID
+      AND b.BookingStatus = 'wl';
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++-------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> CALL GetWaitlistedPassengers(12763);
++-------------+-----------------+-----------------------------+---------+---------------------+---------------+
+| PassengerID | Name            | Email                       | TrainID | JourneyDate         | BookingStatus |
++-------------+-----------------+-----------------------------+---------+---------------------+---------------+
+|           2 | Anjali Singh    | anjali.singh@example.com    |   12763 | 2025-04-16 06:00:00 | wl            |
+|          19 | Sonali Deshmukh | sonali.deshmukh@example.com |   12763 | 2025-04-26 06:00:00 | wl            |
++-------------+-----------------+-----------------------------+---------+---------------------+---------------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show create procedure  GetTotalRefundAmount;
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure            | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | character_set_client | collation_connection | Database Collation |
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetTotalRefundAmount | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetTotalRefundAmount`(
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT
+        T.TrainID,
+        T.TrainName,
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRefund
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.TrainID = p_trainID
+      AND B.JourneyDate = p_journeyDate
+    GROUP BY T.TrainID, T.TrainName;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++----------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetTotalRefundAmount(12302,"2025-04-15 16:55:00");
++---------+--------------------------+-------------+
+| TrainID | TrainName                | TotalRefund |
++---------+--------------------------+-------------+
+|   12302 | Kolkata Rajdhani Express |       29000 |
++---------+--------------------------+-------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show create procedure  GetTotalRevenue;
++-----------------+-----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure       | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | character_set_client | collation_connection | Database Collation |
++-----------------+-----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetTotalRevenue | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetTotalRevenue`(
+    IN p_startDate DATETIME,
+    IN p_endDate   DATETIME,
+    IN p_bookingStatus VARCHAR(10)
+)
+BEGIN
+    SELECT
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRevenue
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.JourneyDate BETWEEN p_startDate AND p_endDate
+      AND B.BookingStatus = p_bookingStatus;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++-----------------+-----------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetTotalRevenue("2025-04-16 06:00:00","2025-04-29 06:00:00","cnf");
++--------------+
+| TotalRevenue |
++--------------+
+|       233200 |
++--------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CALL GetTotalRevenue("2025-04-16 06:00:00","2025-04-29 06:00:00","wl");
++--------------+
+| TotalRevenue |
++--------------+
+|        81200 |
++--------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show create procedure  GetCancellationRecords;
++------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure              | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                           | character_set_client | collation_connection | Database Collation |
++------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetCancellationRecords | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCancellationRecords`()
+BEGIN
+    SELECT
+        b.BookingID,
+        p.Name AS PassengerName,
+        t.TrainName,
+        b.JourneyDate,
+        b.BookingStatus,
+        b.IsCancelled,
+        b.CancelledDate,
+        b.RefundAmount
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    JOIN Train t ON b.TrainID = t.TrainID
+    WHERE b.BookingStatus = 'cancelled';
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> CALL GetCancellationRecords();
++-----------+------------------+----------------------------------------+---------------------+---------------+-------------+---------------------+--------------+
+| BookingID | PassengerName    | TrainName                              | JourneyDate         | BookingStatus | IsCancelled | CancelledDate       | RefundAmount |
++-----------+------------------+----------------------------------------+---------------------+---------------+-------------+---------------------+--------------+
+|         5 | Ravi Shankar     | Padmavati Express                      | 2025-04-17 06:00:00 | cancelled     |           1 | 2025-04-13 14:00:00 |          250 |
+|        15 | Siddharth Sharma | Secunderabad?Danapur Superfast Express | 2025-04-22 06:00:00 | cancelled     |           1 | 2025-04-19 16:00:00 |          300 |
++-----------+------------------+----------------------------------------+---------------------+---------------+-------------+---------------------+--------------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show create procedure  sp_busiest_route;
++------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure        | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | character_set_client | collation_connection | Database Collation |
++------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| sp_busiest_route | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_busiest_route`()
+BEGIN
+    SELECT
+      ds.StationName AS SourceStationName,
+      asd.StationName AS DestinationStationName,
+      COUNT(*) AS PassengerCount
+    FROM Booking b
+    JOIN Station ds ON b.SourceStationID = ds.StationID
+    JOIN Station asd ON b.DestinationStationID = asd.StationID
+    WHERE b.BookingStatus = 'cnf'
+    GROUP BY b.SourceStationID, b.DestinationStationID
+    ORDER BY PassengerCount DESC
+    LIMIT 1;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++------------------+-----------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL sp_busiest_route();
++-----------------------+------------------------+----------------+
+| SourceStationName     | DestinationStationName | PassengerCount |
++-----------------------+------------------------+----------------+
+| Secunderabad Junction | Danapur Junction       |             11 |
++-----------------------+------------------------+----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show create procedure  sp_itemized_bill_by_class;
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure                 | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | character_set_client | collation_connection | Database Collation |
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| sp_itemized_bill_by_class | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_itemized_bill_by_class`(IN pBookingID INT)
+BEGIN
+    SELECT
+      b.BookingID,
+      p.Name AS PassengerName,
+      t.TrainName,
+      s.DepartureTime,
+      s.ArrivalTime,
+      cla.ClassName,
+      c.CouchNumber,
+      -- Calculate the base fare based on the distance difference multiplied by the fare per KM:
+      ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * cla.FarePerKM), 2) AS BaseFare,
+      -- Calculate the service charge based on the class:
+      CASE
+         WHEN cla.ClassName = 'First AC' THEN 750.00
+         WHEN cla.ClassName = 'Second AC' THEN 500.00
+         WHEN cla.ClassName = 'Third AC' THEN 250.00
+         WHEN cla.ClassName = 'General' THEN 0.00
+         WHEN cla.ClassName = 'Sleeper' THEN 100.00
+         ELSE 0.00
+      END AS ServiceCharge,
+      -- Total amount is the base fare plus the determined service charge:
+      (ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * cla.FarePerKM), 2) +
+       CASE
+         WHEN cla.ClassName = 'First AC' THEN 750.00
+         WHEN cla.ClassName = 'Second AC' THEN 500.00
+         WHEN cla.ClassName = 'Third AC' THEN 250.00
+         WHEN cla.ClassName = 'General' THEN 0.00
+         WHEN cla.ClassName = 'Sleeper' THEN 100.00
+         ELSE 0.00
+       END) AS TotalAmount
+    FROM Booking b
+    JOIN Passenger p ON b.PassengerID = p.PassengerID
+    JOIN Train t ON b.TrainID = t.TrainID
+    JOIN Coach c ON b.CouchID = c.CoachID
+    JOIN Class cla ON b.ClassID = cla.ClassID
+    JOIN Schedule s ON b.ScheduleID = s.ScheduleID
+    JOIN Route R1 ON b.TrainID = R1.TrainID AND b.SourceStationID = R1.StationID
+    JOIN Route R2 ON b.TrainID = R2.TrainID AND b.DestinationStationID = R2.StationID
+    WHERE b.BookingID = pBookingID
+    GROUP BY
+      b.BookingID,
+      p.Name,
+      t.TrainName,
+      s.DepartureTime,
+      s.ArrivalTime,
+      cla.ClassName,
+      c.CouchNumber;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL sp_itemized_bill_by_class(19);
++-----------+-----------------+-------------------+---------------+-------------+-----------+-------------+----------+---------------+-------------+
+| BookingID | PassengerName   | TrainName         | DepartureTime | ArrivalTime | ClassName | CouchNumber | BaseFare | ServiceCharge | TotalAmount |
++-----------+-----------------+-------------------+---------------+-------------+-----------+-------------+----------+---------------+-------------+
+|        19 | Sonali Deshmukh | Padmavati Express | 06:00:00      | 16:00:00    | First AC  | H1          |    11600 |        750.00 |    12350.00 |
++-----------+-----------------+-------------------+---------------+-------------+-----------+-------------+----------+---------------+-------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show create procedure  BookTicketForNewPassenger;
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure                 | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | character_set_client | collation_connection | Database Collation |
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| BookTicketForNewPassenger | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `BookTicketForNewPassenger`(
+    IN p_name              VARCHAR(100),
+    IN p_age               INT,
+    IN p_gender            VARCHAR(10),
+    IN p_email             VARCHAR(100),
+    IN p_phone             VARCHAR(15),
+    IN p_nationality       VARCHAR(50),
+    IN p_type              VARCHAR(20),
+    IN p_disability        VARCHAR(10),
+
+    IN b_trainID           INT,
+    IN b_journeyDate       DATETIME,
+    IN b_sourceStationName VARCHAR(100),
+    IN b_destinationStationName VARCHAR(100),
+    IN b_className         VARCHAR(50),
+    IN b_quota             VARCHAR(20)
+)
+BEGIN
+    -- Local variables for lookups and process control
+    DECLARE new_passengerID INT;
+    DECLARE selected_seatID INT;
+    DECLARE selected_coachID INT;
+    DECLARE booking_status VARCHAR(10);
+    DECLARE new_bookingID INT;
+    DECLARE v_sourceStationID INT;
+    DECLARE v_destinationStationID INT;
+    DECLARE v_classID INT;
+    DECLARE v_scheduleID INT;
+
+    -- Step 1: Insert new passenger details
+    INSERT INTO Passenger (Name, Age, Gender, Email, Phone, Nationality, PassengerType, DisabilityStatus)
+    VALUES (p_name, p_age, p_gender, p_email, p_phone, p_nationality, p_type, p_disability);
+    SET new_passengerID = LAST_INSERT_ID();
+
+    -- Step 2: Look up source station ID using station name
+    SELECT IFNULL(MAX(StationID), 0)
+      INTO v_sourceStationID
+      FROM Station
+     WHERE StationName = b_sourceStationName;
+    IF v_sourceStationID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid source station name.';
+    END IF;
+
+    -- Look up destination station ID using station name
+    SELECT IFNULL(MAX(StationID), 0)
+      INTO v_destinationStationID
+      FROM Station
+     WHERE StationName = b_destinationStationName;
+    IF v_destinationStationID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid destination station name.';
+    END IF;
+
+    -- Look up class ID using class name
+    SELECT IFNULL(MAX(ClassID), 0)
+      INTO v_classID
+      FROM Class
+     WHERE ClassName = b_className;
+    IF v_classID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid class name.';
+    END IF;
+
+    -- Look up schedule ID using train id and the identified source and destination station IDs
+    SELECT IFNULL(MAX(ScheduleID), 0)
+      INTO v_scheduleID
+      FROM Schedule
+     WHERE TrainID = b_trainID
+       AND DepartureStationID = v_sourceStationID
+       AND ArrivalStationID = v_destinationStationID;
+    IF v_scheduleID = 0 THEN
+       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid train number or no schedule for the provided source and destination.';
+    END IF;
+
+    -- Step 3: Find an available seat for the identified class in the specified train,
+    -- ensuring that the seat belongs to a coach of that train.
+    SELECT Seat.SeatID, Seat.CoachID
+      INTO selected_seatID, selected_coachID
+      FROM Seat
+      JOIN Coach ON Seat.CoachID = Coach.CoachID
+     WHERE Coach.TrainID = b_trainID
+       AND Coach.ClassID = v_classID
+       AND Seat.IsAvailable = 1
+     LIMIT 1;
+
+    -- Step 4: Insert booking details based on seat availability
+    IF selected_seatID IS NOT NULL THEN
+        SET booking_status = 'cnf';
+
+        INSERT INTO Booking (
+            PassengerID, TrainID, ScheduleID, BookingDate, JourneyDate,
+            SourceStationID, DestinationStationID, ClassID,
+            CouchID, SeatID, BookingStatus, QuotaType,
+            IsCancelled, CancelledDate, RefundAmount
+        )
+        VALUES (
+            new_passengerID, b_trainID, v_scheduleID, NOW(), b_journeyDate,
+            v_sourceStationID, v_destinationStationID, v_classID,
+            selected_coachID, selected_seatID, booking_status, b_quota,
+            0, NULL, 0
+        );
+
+        SET new_bookingID = LAST_INSERT_ID();
+
+        -- Mark the selected seat as booked and update reservation flag.
+        UPDATE Seat
+           SET IsAvailable = 0,
+               IsReserved  = 1,
+               BookingID   = new_bookingID
+         WHERE SeatID  = selected_seatID
+           AND CoachID = selected_coachID;
+    ELSE
+        -- If no seat is available, proceed with a waitlisted booking.
+        SET booking_status = 'wl';
+
+        INSERT INTO Booking (
+            PassengerID, TrainID, ScheduleID, BookingDate, JourneyDate,
+            SourceStationID, DestinationStationID, ClassID,
+            CouchID, SeatID, BookingStatus, QuotaType,
+            IsCancelled, CancelledDate, RefundAmount
+        )
+        VALUES (
+            new_passengerID, b_trainID, v_scheduleID, NOW(), b_journeyDate,
+            v_sourceStationID, v_destinationStationID, v_classID,
+            NULL, NULL, booking_status, b_quota,
+            0, NULL, 0
+        );
+    END IF;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++---------------------------+-----------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from Booking;
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+| BookingID | PassengerID | TrainID | ScheduleID | BookingDate         | JourneyDate         | SourceStationID | DestinationStationID | ClassID | CouchID | SeatID | BookingStatus | QuotaType      | IsCancelled | CancelledDate       | RefundAmount |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+|         1 |           1 |   12302 |          1 | 2025-04-12 10:00:00 | 2025-04-15 16:55:00 |              51 |                   57 |       4 |      16 |     10 | cnf           | General        |           0 | NULL                |            0 |
+|         2 |           2 |   12763 |          2 | 2025-04-12 14:30:00 | 2025-04-16 06:00:00 |               1 |                   28 |       4 |      34 |     12 | wl            | Tatkal         |           0 | NULL                |            0 |
+|         3 |           3 |   12791 |          3 | 2025-04-11 16:00:00 | 2025-04-13 06:00:00 |               1 |                   27 |       4 |      52 |     20 | rac           | General        |           0 | NULL                |            0 |
+|         4 |           4 |   12302 |          1 | 2025-04-10 08:00:00 | 2025-04-14 16:55:00 |              51 |                   57 |       4 |      16 |     20 | cnf           | Normal         |           0 | NULL                |            0 |
+|         5 |           5 |   12763 |          2 | 2025-04-13 11:30:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |     15 | cancelled     | Ladies         |           1 | 2025-04-13 14:00:00 |          250 |
+|         6 |           6 |   12791 |          3 | 2025-04-13 09:15:00 | 2025-04-18 06:00:00 |               1 |                   27 |       4 |      52 |     18 | cnf           | General        |           0 | NULL                |            0 |
+|         7 |           7 |   12763 |          2 | 2025-04-14 13:45:00 | 2025-04-19 06:00:00 |               1 |                   28 |       4 |      34 |     20 | rac           | Tatkal         |           0 | NULL                |            0 |
+|         8 |           8 |   12302 |          1 | 2025-04-12 20:00:00 | 2025-04-20 16:55:00 |              51 |                   57 |       4 |      16 |     16 | wl            | General        |           0 | NULL                |            0 |
+|         9 |           9 |   12791 |          3 | 2025-04-15 18:00:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        10 |          10 |   12763 |          2 | 2025-04-13 11:00:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |      2 | cnf           | Normal         |           0 | NULL                |            0 |
+|        11 |          11 |   12791 |          3 | 2025-04-14 07:30:00 | 2025-04-15 06:00:00 |               1 |                   27 |       4 |      52 |      3 | cnf           | General        |           0 | NULL                |            0 |
+|        12 |          12 |   12763 |          2 | 2025-04-16 15:30:00 | 2025-04-18 06:00:00 |               1 |                   28 |       4 |      34 |      4 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        13 |          13 |   12791 |          3 | 2025-04-17 14:00:00 | 2025-04-19 06:00:00 |               1 |                   27 |       4 |      52 |      5 | cnf           | Normal         |           0 | NULL                |            0 |
+|        14 |          14 |   12302 |          1 | 2025-04-18 09:30:00 | 2025-04-21 16:55:00 |              51 |                   57 |       4 |      16 |      6 | wl            | Ladies         |           0 | NULL                |            0 |
+|        15 |          15 |   12791 |          3 | 2025-04-19 12:15:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      7 | cancelled     | Senior Citizen |           1 | 2025-04-19 16:00:00 |          300 |
+|        16 |          16 |   12763 |          2 | 2025-04-20 13:00:00 | 2025-04-23 06:00:00 |               1 |                   28 |       4 |      34 |      8 | cnf           | General        |           0 | NULL                |            0 |
+|        17 |          17 |   12302 |          1 | 2025-04-21 17:45:00 | 2025-04-24 16:55:00 |              51 |                   57 |       4 |      16 |      9 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        18 |          18 |   12791 |          3 | 2025-04-22 10:30:00 | 2025-04-25 06:00:00 |               1 |                   27 |       4 |      52 |     10 | cnf           | Normal         |           0 | NULL                |            0 |
+|        19 |          19 |   12763 |          2 | 2025-04-23 20:00:00 | 2025-04-26 06:00:00 |               1 |                   28 |       4 |      34 |     11 | wl            | Ladies         |           0 | NULL                |            0 |
+|        20 |          20 |   12791 |          3 | 2025-04-24 11:45:00 | 2025-04-27 06:00:00 |               1 |                   27 |       4 |      52 |     12 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        21 |          22 |   12791 |          3 | 2025-04-15 17:58:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        22 |          23 |   12791 |          3 | 2025-04-15 17:59:06 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        24 |          25 |   12791 |          3 | 2025-04-15 18:23:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      4 | cnf           | General        |           0 | NULL                |            0 |
+|        25 |          26 |   12791 |          3 | 2025-04-15 18:26:38 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      6 | cnf           | General        |           0 | NULL                |            0 |
+|        30 |          34 |   12791 |          3 | 2025-04-16 16:41:29 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | General        |           0 | NULL                |            0 |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+25 rows in set (0.00 sec)
+
+mysql> CALL BookTicketForNewPassenger(
+    ->     'Khaleed', 19, 'male', 'mk@example.com', '7876543210',
+    ->     'Indian', 'Adult', 'No',
+    ->     12791,'2025-04-29 06:00:00', "Secunderabad Junction","Danapur Junction", "First AC", 'General');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from Booking;
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+| BookingID | PassengerID | TrainID | ScheduleID | BookingDate         | JourneyDate         | SourceStationID | DestinationStationID | ClassID | CouchID | SeatID | BookingStatus | QuotaType      | IsCancelled | CancelledDate       | RefundAmount |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+|         1 |           1 |   12302 |          1 | 2025-04-12 10:00:00 | 2025-04-15 16:55:00 |              51 |                   57 |       4 |      16 |     10 | cnf           | General        |           0 | NULL                |            0 |
+|         2 |           2 |   12763 |          2 | 2025-04-12 14:30:00 | 2025-04-16 06:00:00 |               1 |                   28 |       4 |      34 |     12 | wl            | Tatkal         |           0 | NULL                |            0 |
+|         3 |           3 |   12791 |          3 | 2025-04-11 16:00:00 | 2025-04-13 06:00:00 |               1 |                   27 |       4 |      52 |     20 | rac           | General        |           0 | NULL                |            0 |
+|         4 |           4 |   12302 |          1 | 2025-04-10 08:00:00 | 2025-04-14 16:55:00 |              51 |                   57 |       4 |      16 |     20 | cnf           | Normal         |           0 | NULL                |            0 |
+|         5 |           5 |   12763 |          2 | 2025-04-13 11:30:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |     15 | cancelled     | Ladies         |           1 | 2025-04-13 14:00:00 |          250 |
+|         6 |           6 |   12791 |          3 | 2025-04-13 09:15:00 | 2025-04-18 06:00:00 |               1 |                   27 |       4 |      52 |     18 | cnf           | General        |           0 | NULL                |            0 |
+|         7 |           7 |   12763 |          2 | 2025-04-14 13:45:00 | 2025-04-19 06:00:00 |               1 |                   28 |       4 |      34 |     20 | rac           | Tatkal         |           0 | NULL                |            0 |
+|         8 |           8 |   12302 |          1 | 2025-04-12 20:00:00 | 2025-04-20 16:55:00 |              51 |                   57 |       4 |      16 |     16 | wl            | General        |           0 | NULL                |            0 |
+|         9 |           9 |   12791 |          3 | 2025-04-15 18:00:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        10 |          10 |   12763 |          2 | 2025-04-13 11:00:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |      2 | cnf           | Normal         |           0 | NULL                |            0 |
+|        11 |          11 |   12791 |          3 | 2025-04-14 07:30:00 | 2025-04-15 06:00:00 |               1 |                   27 |       4 |      52 |      3 | cnf           | General        |           0 | NULL                |            0 |
+|        12 |          12 |   12763 |          2 | 2025-04-16 15:30:00 | 2025-04-18 06:00:00 |               1 |                   28 |       4 |      34 |      4 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        13 |          13 |   12791 |          3 | 2025-04-17 14:00:00 | 2025-04-19 06:00:00 |               1 |                   27 |       4 |      52 |      5 | cnf           | Normal         |           0 | NULL                |            0 |
+|        14 |          14 |   12302 |          1 | 2025-04-18 09:30:00 | 2025-04-21 16:55:00 |              51 |                   57 |       4 |      16 |      6 | wl            | Ladies         |           0 | NULL                |            0 |
+|        15 |          15 |   12791 |          3 | 2025-04-19 12:15:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      7 | cancelled     | Senior Citizen |           1 | 2025-04-19 16:00:00 |          300 |
+|        16 |          16 |   12763 |          2 | 2025-04-20 13:00:00 | 2025-04-23 06:00:00 |               1 |                   28 |       4 |      34 |      8 | cnf           | General        |           0 | NULL                |            0 |
+|        17 |          17 |   12302 |          1 | 2025-04-21 17:45:00 | 2025-04-24 16:55:00 |              51 |                   57 |       4 |      16 |      9 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        18 |          18 |   12791 |          3 | 2025-04-22 10:30:00 | 2025-04-25 06:00:00 |               1 |                   27 |       4 |      52 |     10 | cnf           | Normal         |           0 | NULL                |            0 |
+|        19 |          19 |   12763 |          2 | 2025-04-23 20:00:00 | 2025-04-26 06:00:00 |               1 |                   28 |       4 |      34 |     11 | wl            | Ladies         |           0 | NULL                |            0 |
+|        20 |          20 |   12791 |          3 | 2025-04-24 11:45:00 | 2025-04-27 06:00:00 |               1 |                   27 |       4 |      52 |     12 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        21 |          22 |   12791 |          3 | 2025-04-15 17:58:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        22 |          23 |   12791 |          3 | 2025-04-15 17:59:06 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        24 |          25 |   12791 |          3 | 2025-04-15 18:23:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      4 | cnf           | General        |           0 | NULL                |            0 |
+|        25 |          26 |   12791 |          3 | 2025-04-15 18:26:38 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      6 | cnf           | General        |           0 | NULL                |            0 |
+|        30 |          34 |   12791 |          3 | 2025-04-16 16:41:29 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | General        |           0 | NULL                |            0 |
+|        31 |          35 |   12791 |          3 | 2025-04-21 23:12:20 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+26 rows in set (0.00 sec)
+
+mysql> select * from Passenger;
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+| PassengerID | Name             | Age  | Gender | Email                        | Phone      | Nationality | PassengerType  | DisabilityStatus |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+|           1 | Rajesh Kumar     |   30 | male   | rajesh.kumar@example.com     | 9876543210 | Indian      | Adult          | No               |
+|           2 | Anjali Singh     |   25 | female | anjali.singh@example.com     | 9988776655 | Indian      | Adult          | No               |
+|           3 | Aarav Mehta      |   10 | male   | aarav.mehta@example.com      | 9988665544 | Indian      | child          | No               |
+|           4 | Sanya Patel      |   70 | female | sanya.patel@example.com      | 9898989898 | Indian      | senior citizen | No               |
+|           5 | Ravi Shankar     |   45 | male   | ravi.shankar@example.com     | 9765432109 | Indian      | Adult          | Yes              |
+|           6 | Priya Gupta      |   18 | female | priya.gupta@example.com      | 9988777788 | Indian      | student        | No               |
+|           7 | Mohammed Ali     |   60 | male   | mohammed.ali@example.com     | 9765321890 | Indian      | senior citizen | Yes              |
+|           8 | Meera Iyer       |    5 | female | meera.iyer@example.com       | 9556677889 | Indian      | child          | No               |
+|           9 | Vikram Chauhan   |   35 | male   | vikram.chauhan@example.com   | 9333445566 | Indian      | Adult          | No               |
+|          10 | Neha Sharma      |   28 | female | neha.sharma@example.com      | 9200334455 | Indian      | Adult          | No               |
+|          11 | Arvind Yadav     |   50 | male   | arvind.yadav@example.com     | 9876554321 | Indian      | Adult          | No               |
+|          12 | Kiran Reddy      |   22 | female | kiran.reddy@example.com      | 9944778899 | Indian      | Adult          | No               |
+|          13 | Suresh Kumar     |   65 | male   | suresh.kumar@example.com     | 9666554433 | Indian      | senior citizen | Yes              |
+|          14 | Nisha Verma      |   28 | female | nisha.verma@example.com      | 9865332244 | Indian      | Adult          | No               |
+|          15 | Siddharth Sharma |   13 | male   | siddharth.sharma@example.com | 9399221100 | Indian      | child          | No               |
+|          16 | Divya Nair       |   32 | female | divya.nair@example.com       | 9199887744 | Indian      | Adult          | No               |
+|          17 | Rajeev Chandra   |   40 | male   | rajeeve.chandra@example.com  | 9488776655 | Indian      | Adult          | No               |
+|          18 | Manoj Joshi      |   75 | male   | manoj.joshi@example.com      | 9222345678 | Indian      | senior citizen | Yes              |
+|          19 | Sonali Deshmukh  |    8 | female | sonali.deshmukh@example.com  | 9389887766 | Indian      | child          | No               |
+|          20 | Harish Bhat      |   60 | male   | harish.bhat@example.com      | 9756432100 | Indian      | senior citizen | No               |
+|          21 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          22 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          23 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          25 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          26 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          30 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          31 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          33 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          34 | Sathvik          |   19 | male   | ss@example.com               | 7876543210 | Indian      | Adult          | No               |
+|          35 | Khaleed          |   19 | male   | mk@example.com               | 7876543210 | Indian      | Adult          | No               |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+30 rows in set (0.00 sec)
+
+mysql> show create procedure  CancelTicket;
++--------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure    | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | character_set_client | collation_connection | Database Collation |
++--------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| CancelTicket | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `CancelTicket`(IN p_BookingID INT)
+BEGIN
+    DECLARE v_PassengerID INT;
+
+    -- First: Update seat record(s) to remove reference to the booking.
+    UPDATE Seat
+      SET IsAvailable = 1,
+          BookingID   = NULL,
+          IsReserved  = 0
+     WHERE BookingID = p_BookingID;
+
+    -- Retrieve the PassengerID associated with the booking.
+    SELECT PassengerID
+      INTO v_PassengerID
+      FROM Booking
+     WHERE BookingID = p_BookingID;
+
+    -- Delete the booking record.
+    DELETE FROM Booking
+     WHERE BookingID = p_BookingID;
+
+    -- Delete the passenger record.
+    DELETE FROM Passenger
+     WHERE PassengerID = v_PassengerID;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++--------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from Seat
+    -> where SeatID=2 and CoachID=52;
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+| SeatID | CoachID | SeatNumber | ClassID | IsAvailable | BookingID | SeatType | Position | IsReserved |
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+|      2 |      52 | H1-2       |       4 |           0 |        31 | Middle   | Aisle    |          1 |
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+1 row in set (0.00 sec)
+
+mysql> CALL CancelTicket(31);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from Passenger;
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+| PassengerID | Name             | Age  | Gender | Email                        | Phone      | Nationality | PassengerType  | DisabilityStatus |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+|           1 | Rajesh Kumar     |   30 | male   | rajesh.kumar@example.com     | 9876543210 | Indian      | Adult          | No               |
+|           2 | Anjali Singh     |   25 | female | anjali.singh@example.com     | 9988776655 | Indian      | Adult          | No               |
+|           3 | Aarav Mehta      |   10 | male   | aarav.mehta@example.com      | 9988665544 | Indian      | child          | No               |
+|           4 | Sanya Patel      |   70 | female | sanya.patel@example.com      | 9898989898 | Indian      | senior citizen | No               |
+|           5 | Ravi Shankar     |   45 | male   | ravi.shankar@example.com     | 9765432109 | Indian      | Adult          | Yes              |
+|           6 | Priya Gupta      |   18 | female | priya.gupta@example.com      | 9988777788 | Indian      | student        | No               |
+|           7 | Mohammed Ali     |   60 | male   | mohammed.ali@example.com     | 9765321890 | Indian      | senior citizen | Yes              |
+|           8 | Meera Iyer       |    5 | female | meera.iyer@example.com       | 9556677889 | Indian      | child          | No               |
+|           9 | Vikram Chauhan   |   35 | male   | vikram.chauhan@example.com   | 9333445566 | Indian      | Adult          | No               |
+|          10 | Neha Sharma      |   28 | female | neha.sharma@example.com      | 9200334455 | Indian      | Adult          | No               |
+|          11 | Arvind Yadav     |   50 | male   | arvind.yadav@example.com     | 9876554321 | Indian      | Adult          | No               |
+|          12 | Kiran Reddy      |   22 | female | kiran.reddy@example.com      | 9944778899 | Indian      | Adult          | No               |
+|          13 | Suresh Kumar     |   65 | male   | suresh.kumar@example.com     | 9666554433 | Indian      | senior citizen | Yes              |
+|          14 | Nisha Verma      |   28 | female | nisha.verma@example.com      | 9865332244 | Indian      | Adult          | No               |
+|          15 | Siddharth Sharma |   13 | male   | siddharth.sharma@example.com | 9399221100 | Indian      | child          | No               |
+|          16 | Divya Nair       |   32 | female | divya.nair@example.com       | 9199887744 | Indian      | Adult          | No               |
+|          17 | Rajeev Chandra   |   40 | male   | rajeeve.chandra@example.com  | 9488776655 | Indian      | Adult          | No               |
+|          18 | Manoj Joshi      |   75 | male   | manoj.joshi@example.com      | 9222345678 | Indian      | senior citizen | Yes              |
+|          19 | Sonali Deshmukh  |    8 | female | sonali.deshmukh@example.com  | 9389887766 | Indian      | child          | No               |
+|          20 | Harish Bhat      |   60 | male   | harish.bhat@example.com      | 9756432100 | Indian      | senior citizen | No               |
+|          21 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          22 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          23 | Dheeraj Reddy    |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          25 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          26 | naveen           |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          30 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          31 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          33 | kuladeep         |   22 | male   | dheeraj@example.com          | 9876543210 | Indian      | Adult          | No               |
+|          34 | Sathvik          |   19 | male   | ss@example.com               | 7876543210 | Indian      | Adult          | No               |
++-------------+------------------+------+--------+------------------------------+------------+-------------+----------------+------------------+
+29 rows in set (0.00 sec)
+
+mysql> select * from Booking;
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+| BookingID | PassengerID | TrainID | ScheduleID | BookingDate         | JourneyDate         | SourceStationID | DestinationStationID | ClassID | CouchID | SeatID | BookingStatus | QuotaType      | IsCancelled | CancelledDate       | RefundAmount |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+|         1 |           1 |   12302 |          1 | 2025-04-12 10:00:00 | 2025-04-15 16:55:00 |              51 |                   57 |       4 |      16 |     10 | cnf           | General        |           0 | NULL                |            0 |
+|         2 |           2 |   12763 |          2 | 2025-04-12 14:30:00 | 2025-04-16 06:00:00 |               1 |                   28 |       4 |      34 |     12 | wl            | Tatkal         |           0 | NULL                |            0 |
+|         3 |           3 |   12791 |          3 | 2025-04-11 16:00:00 | 2025-04-13 06:00:00 |               1 |                   27 |       4 |      52 |     20 | rac           | General        |           0 | NULL                |            0 |
+|         4 |           4 |   12302 |          1 | 2025-04-10 08:00:00 | 2025-04-14 16:55:00 |              51 |                   57 |       4 |      16 |     20 | cnf           | Normal         |           0 | NULL                |            0 |
+|         5 |           5 |   12763 |          2 | 2025-04-13 11:30:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |     15 | cancelled     | Ladies         |           1 | 2025-04-13 14:00:00 |          250 |
+|         6 |           6 |   12791 |          3 | 2025-04-13 09:15:00 | 2025-04-18 06:00:00 |               1 |                   27 |       4 |      52 |     18 | cnf           | General        |           0 | NULL                |            0 |
+|         7 |           7 |   12763 |          2 | 2025-04-14 13:45:00 | 2025-04-19 06:00:00 |               1 |                   28 |       4 |      34 |     20 | rac           | Tatkal         |           0 | NULL                |            0 |
+|         8 |           8 |   12302 |          1 | 2025-04-12 20:00:00 | 2025-04-20 16:55:00 |              51 |                   57 |       4 |      16 |     16 | wl            | General        |           0 | NULL                |            0 |
+|         9 |           9 |   12791 |          3 | 2025-04-15 18:00:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        10 |          10 |   12763 |          2 | 2025-04-13 11:00:00 | 2025-04-17 06:00:00 |               1 |                   28 |       4 |      34 |      2 | cnf           | Normal         |           0 | NULL                |            0 |
+|        11 |          11 |   12791 |          3 | 2025-04-14 07:30:00 | 2025-04-15 06:00:00 |               1 |                   27 |       4 |      52 |      3 | cnf           | General        |           0 | NULL                |            0 |
+|        12 |          12 |   12763 |          2 | 2025-04-16 15:30:00 | 2025-04-18 06:00:00 |               1 |                   28 |       4 |      34 |      4 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        13 |          13 |   12791 |          3 | 2025-04-17 14:00:00 | 2025-04-19 06:00:00 |               1 |                   27 |       4 |      52 |      5 | cnf           | Normal         |           0 | NULL                |            0 |
+|        14 |          14 |   12302 |          1 | 2025-04-18 09:30:00 | 2025-04-21 16:55:00 |              51 |                   57 |       4 |      16 |      6 | wl            | Ladies         |           0 | NULL                |            0 |
+|        15 |          15 |   12791 |          3 | 2025-04-19 12:15:00 | 2025-04-22 06:00:00 |               1 |                   27 |       4 |      52 |      7 | cancelled     | Senior Citizen |           1 | 2025-04-19 16:00:00 |          300 |
+|        16 |          16 |   12763 |          2 | 2025-04-20 13:00:00 | 2025-04-23 06:00:00 |               1 |                   28 |       4 |      34 |      8 | cnf           | General        |           0 | NULL                |            0 |
+|        17 |          17 |   12302 |          1 | 2025-04-21 17:45:00 | 2025-04-24 16:55:00 |              51 |                   57 |       4 |      16 |      9 | rac           | Tatkal         |           0 | NULL                |            0 |
+|        18 |          18 |   12791 |          3 | 2025-04-22 10:30:00 | 2025-04-25 06:00:00 |               1 |                   27 |       4 |      52 |     10 | cnf           | Normal         |           0 | NULL                |            0 |
+|        19 |          19 |   12763 |          2 | 2025-04-23 20:00:00 | 2025-04-26 06:00:00 |               1 |                   28 |       4 |      34 |     11 | wl            | Ladies         |           0 | NULL                |            0 |
+|        20 |          20 |   12791 |          3 | 2025-04-24 11:45:00 | 2025-04-27 06:00:00 |               1 |                   27 |       4 |      52 |     12 | cnf           | Senior Citizen |           0 | NULL                |            0 |
+|        21 |          22 |   12791 |          3 | 2025-04-15 17:58:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        22 |          23 |   12791 |          3 | 2025-04-15 17:59:06 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      2 | cnf           | General        |           0 | NULL                |            0 |
+|        24 |          25 |   12791 |          3 | 2025-04-15 18:23:15 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      4 | cnf           | General        |           0 | NULL                |            0 |
+|        25 |          26 |   12791 |          3 | 2025-04-15 18:26:38 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      6 | cnf           | General        |           0 | NULL                |            0 |
+|        30 |          34 |   12791 |          3 | 2025-04-16 16:41:29 | 2025-04-29 06:00:00 |               1 |                   27 |       4 |      52 |      1 | cnf           | General        |           0 | NULL                |            0 |
++-----------+-------------+---------+------------+---------------------+---------------------+-----------------+----------------------+---------+---------+--------+---------------+----------------+-------------+---------------------+--------------+
+25 rows in set (0.00 sec)
+
+mysql> select * from Seat
+    -> where SeatID=2 and CoachID=52;
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+| SeatID | CoachID | SeatNumber | ClassID | IsAvailable | BookingID | SeatType | Position | IsReserved |
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+|      2 |      52 | H1-2       |       4 |           1 |      NULL | Middle   | Aisle    |          0 |
++--------+---------+------------+---------+-------------+-----------+----------+----------+------------+
+1 row in set (0.00 sec)
+
+mysql> show create procedure  GetTotalRefundAmountByClass;
++-----------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure                   | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | character_set_client | collation_connection | Database Collation |
++-----------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| GetTotalRefundAmountByClass | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `GetTotalRefundAmountByClass`(
+    IN p_trainID INT,
+    IN p_journeyDate DATETIME
+)
+BEGIN
+    SELECT
+        T.TrainID,
+        T.TrainName,
+        C.ClassName,
+        ROUND(SUM((R2.DistanceFromSource - R1.DistanceFromSource) * C.FarePerKM), 2) AS TotalRefund
+    FROM Booking B
+    JOIN Train T ON B.TrainID = T.TrainID
+    JOIN Class C ON B.ClassID = C.ClassID
+    JOIN Route R1 ON B.TrainID = R1.TrainID AND B.SourceStationID = R1.StationID
+    JOIN Route R2 ON B.TrainID = R2.TrainID AND B.DestinationStationID = R2.StationID
+    WHERE B.TrainID = p_trainID
+      AND B.JourneyDate = p_journeyDate
+    GROUP BY T.TrainID, T.TrainName, C.ClassName;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++-----------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetTotalRefundAmountByClass(12302,"2025-04-15 16:55:00");
++---------+--------------------------+-----------+-------------+
+| TrainID | TrainName                | ClassName | TotalRefund |
++---------+--------------------------+-----------+-------------+
+|   12302 | Kolkata Rajdhani Express | First AC  |       29000 |
++---------+--------------------------+-----------+-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show create procedure  sp_idelst_route;
++-----------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure       | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | character_set_client | collation_connection | Database Collation |
++-----------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| sp_idelst_route | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_idelst_route`()
+BEGIN
+    SELECT
+      ds.StationName AS SourceStationName,
+      asd.StationName AS DestinationStationName,
+      COUNT(*) AS PassengerCount
+    FROM Booking b
+    JOIN Station ds ON b.SourceStationID = ds.StationID
+    JOIN Station asd ON b.DestinationStationID = asd.StationID
+    WHERE b.BookingStatus = 'cnf'
+    GROUP BY b.SourceStationID, b.DestinationStationID
+    ORDER BY PassengerCount
+    LIMIT 1;
+END | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++-----------------+-----------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> call sp_idlest_route;
+ERROR 1305 (42000): PROCEDURE rail.sp_idlest_route does not exist
+mysql> call sp_idlest_route();
+ERROR 1305 (42000): PROCEDURE rail.sp_idlest_route does not exist
+mysql> call sp_idelst_route;
++---------------------------+------------------------+----------------+
+| SourceStationName         | DestinationStationName | PassengerCount |
++---------------------------+------------------------+----------------+
+| New Delhi Railway Station | Howrah Junction        |              2 |
++---------------------------+------------------------+----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
